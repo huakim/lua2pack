@@ -1,0 +1,3 @@
+include LICENSE
+include templates/generic.spec
+include conf.py
