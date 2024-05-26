@@ -1,20 +1,15 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
-import conf
-
-attrs={}
-
-for i in dir(conf):
-    if not i.startswith('_'):
-        attrs[i] = getattr(conf, i)
 
 setup(
+ name="lua2pack",
+ version="0.0.1",
+ packages=find_packages(),
  entry_points = {
     'console_scripts': [
        'lua2pack = lua2pack:main',
     ],
  },
- py_modules=['lua2pack'],
  install_requires=['jinja2-easy.generator', 'lupa'],
- **attrs
 )
+
