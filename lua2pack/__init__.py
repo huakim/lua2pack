@@ -6,16 +6,7 @@ import urllib.request
 import argparse
 from jinja2_easy.generator import Generator
 from os import getcwd
-
-os_specific_code = """
-
-subpackages = true
-autogen = false
-filelist = true
-skip_build_dependencies = false
-skip_check_dependencies = false
-
-"""
+from .osdeps import os_specific_code
 
 def read_rockspec(path_or_uri):
     content = None
