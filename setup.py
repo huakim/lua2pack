@@ -13,7 +13,7 @@ setup(
     'console_scripts': [
        'lua2pack = lua2pack:main',
     ],
- }
+ },
  py_modules=['lua2pack'],
  install_requires=['jinja2-easy.generator', 'lupa'],
  **attrs
