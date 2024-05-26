@@ -10,6 +10,6 @@ for i in dir(conf):
 
 setup(
  py_modules=['lua2pack'],
- install_requires=['jinja2_easy.generator', 'lupa'],
+ install_requires=['jinja2-easy.generator', 'lupa'],
  **attrs
 )
