@@ -1,6 +1,1 @@
-description = "Generate RPM spec files from luarocks"
-summary = "Generate RPM spec files from luarocks"
-version = "0.0.1"
-license = "GPLv3"
-name = "lua2pack"
-url = "https://github.com/huakim/lua2pack"
+
