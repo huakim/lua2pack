@@ -6,7 +6,7 @@ import urllib.request
 import argparse
 from jinja2_easy.generator import Generator
 from os import getcwd
-from .osdeps import os_specific_code
+from .osdeps import os_specific_code, os_specific_args
 
 def read_rockspec(path_or_uri):
     content = None
@@ -61,19 +61,12 @@ def main(args=None):
 
     for i in duplicates:
         parser.add_argument('--'+i.replace('_', '-'), help=f"Additional {i.replace('_', ' ')} dependencies to be added", type=str, action='append')
-    parser.add_argument("--system", help="System name")
-    parser.add_argument("--arch", help="Architecture name")
-    parser.add_argument('--name', help="Override default name")
 
     parser.add_argument('-t', '--template', choices=generator.file_template_list(), default='generic.spec', help='file template')
+    os_specific_args(parser)
     parser.add_argument('-f', '--filename', help='spec filename (optional)')
 # Parse the command-line arguments
     args = parser.parse_args(args)
-
-    system = args.system or platform.system()
-    machine = args.arch or platform.machine()
-    name = args.name
-    name = repr(name) if name else 'package'
 
     rockspec_path = args.rockspec
     luacode = args.luacode or []
@@ -82,14 +75,7 @@ def main(args=None):
     newline="\n"
     luaprog = f'''
 {read_rockspec(rockspec_path)}
-prefix = package .. '-' .. version
-source = prefix .. '.tar.gz'
-rockspec = prefix .. '.rockspec'
-name = {name}
-{os_specific_code}
-major, minor = string.match(version, "(.-)%-(.*)")
-system = {repr(system)}
-arch = {repr(machine)}
+{os_specific_code(args)}
 {newline.join([cache[a]  for a in duplicates if custom_dependency(args, a, cache)] + luacode + [a[0] + '=' + a[1] for a in defines if len(a) >  1])}
 '''
     lua = lupa.LuaRuntime()
