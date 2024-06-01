@@ -1,27 +1,29 @@
 %define luarock_pkg_name {{ package }}
 %define luarock_pkg_version {{ version }}
 %define luarock_pkg_prefix {{ prefix }}
+%define luarock_pkg_major {{ major }}
+%define luarock_pkg_minor {{ minor }}
 {%- if not autogen %}
 %global __luarock_requires %{_bindir}/true
 %global __luarock_provides %{_bindir}/true
 {%- endif %}
 
-Name: lua-{{ name }}
+Name: {{ name }}
 BuildRequires: luarock-macros
 %if %{defined luarock_requires}
 %luarock_requires
 %else
 BuildRequires: lua-devel
 %endif
-Version: {{ major }}
-Release: {{ minor }}
+Version: %{luarock_pkg_major}
+Release: %{luarock_pkg_minor}
 Summary: {{ description.summary }}
 Url: {{ description.license }}
 License: {{ description.license }}
 
 {%- if not autogen %}
+Provides: %{luadist %{luarock_pkg_name} = %{luarock_pkg_major}}
 {%- if not skip_build_dependencies %}
-Provides: %{luadist {{ package }} = {{ major }}}
 {%- for dep in dependencies %}
 Requires: %{luadist {{ dependencies[dep] }}}
 {%- endfor %}

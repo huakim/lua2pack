@@ -7,7 +7,7 @@ def os_specific_code(args):
     system = args.system or platform.system()
     machine = args.arch or platform.machine()
     name = args.name
-    name = repr(name) if name else 'package'
+    name = repr(name) if name else "'lua-'..package"
 
     return f"""
 
