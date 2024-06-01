@@ -22,7 +22,7 @@ Url: {{ description.license }}
 License: {{ description.license }}
 
 {%- if not autogen %}
-Provides: %{luadist %{luarock_pkg_name} = %{luarock_pkg_major}}
+Provides: %{luadist %{luarock_pkg_name} = %{luarock_pkg_version}}
 {%- if not skip_build_dependencies %}
 {%- for dep in dependencies %}
 Requires: %{luadist {{ dependencies[dep] }}}
