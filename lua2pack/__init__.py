@@ -3,9 +3,12 @@ import platform
 import lupa
 import sys
 import urllib.request
+from pathlib import Path
 import argparse
 from jinja2_easy.generator import Generator
 from .osdeps_utils import lua_code as os_specific_lua_code, generate_args as os_specific_generate_args
+from os.path import isdir
+from os import chdir
 
 def read_rockspec(path_or_uri):
     content = None
@@ -48,8 +51,8 @@ class generate_rockspec(Generator):
         # generate lua code (luarocks rockspec contains an lua compatible code)
         luaprog = f'''
 {read_rockspec(rockspec_path)}
-{os_specific_lua_code(args)}
 {newline.join([cache[a]  for a in duplicates if custom_dependency(args, a, cache)] + luacode + [a[0] + '=' + a[1] for a in defines if len(a) >  1])}
+{os_specific_lua_code(args)}
 '''
         # create lua runtime
         lua = lupa.LuaRuntime()
@@ -62,6 +65,9 @@ class generate_rockspec(Generator):
         rockspec = generator.rockspec(args)
         template = args.template or rockspec.template
         filename = args.filename or generator.default_file_output(rockspec.name, template)
+        outdir = args.outdir
+        if outdir and isdir(outdir):
+            chdir(outdir)
         generator.write_template(rockspec, template, filename)
 
 
@@ -106,7 +112,9 @@ def main(args=None):
     # Template file for generate command
     parser.add_argument('-t', '--template', choices=generator.file_template_list(), help='file template')
     # Template output filename for generate command
-    parser.add_argument('-f', '--filename', help='spec filename (optional)')
+    parser.add_argument('-f', '--filename', help='output filename (optional)')
+    # Template output directory for generate command
+    parser.add_argument('--outdir', help='out directory (used by obs service)')
     # Function for generate command
     parser.set_defaults(func=generator)
     # Parse arguments
