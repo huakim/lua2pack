@@ -6,7 +6,7 @@ import urllib.request
 import argparse
 from jinja2_easy.generator import Generator
 from os import getcwd
-from .osdeps import os_specific_code, os_specific_args
+from .osdeps_utils import os_specific_code, os_specific_args
 
 def read_rockspec(path_or_uri):
     content = None
@@ -34,8 +34,31 @@ def read_rockspec(path_or_uri):
 class generate_rockspec(Generator):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-    def __call__(generator, args, rockspec):
-        template = args.template
+    # function used for generating rockspec specification
+    def rockspec(generator, args):
+
+        # get rockspec path
+        rockspec_path = args.rockspec
+        luacode = args.luacode or []
+        defines = args.define or []
+        cache={}
+        newline="\n"
+        # generate lua code (luarocks rockspec contains an lua compatible code)
+        luaprog = f'''
+{read_rockspec(rockspec_path)}
+{os_specific_lua_code(args)}
+{newline.join([cache[a]  for a in duplicates if custom_dependency(args, a, cache)] + luacode + [a[0] + '=' + a[1] for a in defines if len(a) >  1])}
+'''
+        # create lua runtime
+        lua = lupa.LuaRuntime()
+        # execute code
+        lua.execute(luaprog)
+        # get lua globals
+        rockspec = lua.globals()
+    # function used for generating from template
+    def __call__(generator, args):
+        rockspec = generator.rockspec(args)
+        template = args.template or rockspec.template
         filename = args.filename or generator.default_file_output('lua-'+rockspec.name, template)
         generator.write_template(rockspec, template, filename)
 
@@ -47,58 +70,48 @@ def custom_dependency(args, name, cache):
             return False
     except AttributeError:
         return False
-    joint = ','.join(map(repr, array))
-    cache[name] = name + '={' + joint + '}'
+    if not name in cache:
+        cache[name] = name+'={'+','.join(map(repr, array))+'}'
     return True
 
-def duplicate(*array):
-    return ['add_'+i for i in array] + ['add_luarock_'+i for i in array]
+# Create requirement duplicates
+duplicates = (lambda array: ['add_'+i for i in array] + ['add_luarock_'+i for i in array]) (list(map(lambda a: a+"_requires", ('build', 'check', 'preun', 'pre', 'postun', 'post', 'pretrans', 'posttrans')), 'requires', 'provides', 'recommends'))
 
 def main(args=None):
-# Create the parser
-    parser = argparse.ArgumentParser(description="A Python script that generates a rockspec file")
-# Define the command-line arguments
+    # Create the parser
+    mainparser = argparse.ArgumentParser(description="A Python script that generates a rockspec file")
+
+    # add subparsers
+    subparsers = parser.add_subparsers(title='commands')
+
+    # add generate command
+    parser = subparsers.add_parser('generate', help="generate RPM spec or DEB dsc file for a rockspec specification")
+
+    # Define generator's template environment
     generator = generate_rockspec('lua2pack', getcwd())
-
+    # Define the command-line arguments
+    # Rockspec file
     parser.add_argument("--rockspec", help="Path to the rockspec file or URI", default='<stdin>')
-
+    # Define lua parameters
     parser.add_argument("--define", help="Override some lua parameters", type=str, action='append', nargs='*')
-
+    # Add specific lua code
     parser.add_argument("--luacode", help="Override some lua codes", type=str, action='append')
-
-    duplicates = duplicate(*map(lambda a: a+"_requires", ('build', 'check', 'preun', 'pre', 'postun', 'post', 'pretrans', 'posttrans')), 'requires', 'provides', 'recommends')
-
+    # Add duplicates
     for i in duplicates:
         parser.add_argument('--'+i.replace('_', '-'), help=f"Additional {i.replace('_', ' ')} dependencies to be added", type=str, action='append')
 
-    os_specific_args(parser)
+    os_specific_generate_args(parser)
 
-    subparsers = parser.add_subparsers()
-    genparser.set_defaults(func=generator)
-
-    genparser = subparsers.add_parser('generate', help="generate RPM spec or DEB dsc file for a rockspec specification")
-    genparser.add_argument('-t', '--template', choices=generator.file_template_list(), default='generic.spec', help='file template')
-    genparser.add_argument('-f', '--filename', help='spec filename (optional)')
-# Parse the command-line arguments
+    # Template file for generate command
+    parser.add_argument('-t', '--template', choices=generator.file_template_list(), help='file template')
+    # Template output filename for generate command
+    parser.add_argument('-f', '--filename', help='spec filename (optional)')
+    # Function for generate command
+    parser.set_defaults(func=generator)
+    # Parse arguments
     args = parser.parse_args(args)
-
-    rockspec_path = args.rockspec
-    luacode = args.luacode or []
-    defines = args.define or []
-    cache={}
-    newline="\n"
-
-    luaprog = f'''
-{read_rockspec(rockspec_path)}
-{os_specific_code(args)}
-{newline.join([cache[a]  for a in duplicates if custom_dependency(args, a, cache)] + luacode + [a[0] + '=' + a[1] for a in defines if len(a) >  1])}
-'''
-
-    lua = lupa.LuaRuntime()
-    lua.execute(luaprog)
-    rockspec = lua.globals()
-
-    args.func(args, rockspec)
+    # Execute function
+    args.func(args)
 
 if __name__ == "__main__":
     main()

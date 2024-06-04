@@ -1,9 +1,16 @@
-def os_specific_args(parser):
+from pkgutil import iter_modules
+
+def list_submodules(module):
+    for submodule in iter_modules(module.__path__):
+        yield submodule.name
+
+
+def os_specific_generate_args(parser):
     parser.add_argument("--system", help="System name")
     parser.add_argument("--arch", help="Architecture name")
     parser.add_argument('--name', help="Override default name")
 
-def os_specific_code(args):
+def os_specific_lua_code(args):
     system = args.system or platform.system()
     machine = args.arch or platform.machine()
     name = args.name
@@ -25,6 +32,7 @@ autogen = false
 filelist = true
 skip_build_dependencies = false
 skip_check_dependencies = false
+template = 'opensuse.spec'
 
 """
 
