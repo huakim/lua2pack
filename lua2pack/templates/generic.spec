@@ -9,9 +9,9 @@
 {%- endif %}
 
 Name: {{ name }}
-BuildRequires: luarock-macros
+BuildRequires: luarocks-macros
 {%- if subpackages %}
-BuildRequires: luarock-subpackages-macros
+BuildRequires: luarocks-subpackages-macros
 {%- endif %}
 %if %{defined luarock_requires}
 %luarock_requires
