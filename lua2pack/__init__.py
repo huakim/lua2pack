@@ -5,7 +5,6 @@ import sys
 import urllib.request
 import argparse
 from jinja2_easy.generator import Generator
-from os import getcwd
 from .osdeps_utils import lua_code as os_specific_lua_code, generate_args as os_specific_generate_args
 
 def read_rockspec(path_or_uri):
@@ -80,15 +79,12 @@ duplicates = (lambda array: ['add_'+i for i in array] + ['add_luarock_'+i for i 
 def main(args=None):
     # Create the parser
     mainparser = argparse.ArgumentParser(description="A Python script that generates a rockspec file")
-
     # add subparsers
     subparsers = mainparser.add_subparsers(title='commands')
-
     # add generate command
     parser = subparsers.add_parser('generate', help="generate RPM spec or DEB dsc file for a rockspec specification")
-
     # Define generator's template environment
-    generator = generate_rockspec('lua2pack', getcwd())
+    generator = generate_rockspec('lua2pack', __path__[0])
     # Define the command-line arguments
     # Rockspec file
     parser.add_argument("--rockspec", help="Path to the rockspec file or URI", default='<stdin>')
