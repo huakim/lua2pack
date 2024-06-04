@@ -82,6 +82,8 @@ duplicates = (lambda array: ['add_'+i for i in array] + ['add_luarock_'+i for i 
 def main(args=None):
     # Create the parser
     mainparser = argparse.ArgumentParser(description="A Python script that generates a rockspec file")
+    # set defaults
+    mainparser.set_defaults(func=lambda *a: mainparser.print_help())
     # add subparsers
     subparsers = mainparser.add_subparsers(title='commands')
     # add generate command
