@@ -13,6 +13,9 @@ def read_rockspec(path_or_uri):
     if path_or_uri == "<stdin>":
         # Read from stdin
         content = sys.stdin.read()
+    elif path_or_uri == "<none>":
+        # Return empty string
+        return ''
     elif path_or_uri.startswith("http://") or path_or_uri.startswith("https://"):
         # Read from a URI
         try:
@@ -87,7 +90,7 @@ def main(args=None):
     generator = generate_rockspec('lua2pack', __path__[0])
     # Define the command-line arguments
     # Rockspec file
-    parser.add_argument("--rockspec", help="Path to the rockspec file or URI", default='<stdin>')
+    parser.add_argument("--rockspec", help="Path to the rockspec file or URI", default='<none>')
     # Define lua parameters
     parser.add_argument("--define", help="Override some lua parameters", type=str, action='append', nargs='*')
     # Add specific lua code
