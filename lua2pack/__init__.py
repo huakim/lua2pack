@@ -109,7 +109,7 @@ def main(args=None):
     # Function for generate command
     parser.set_defaults(func=generator)
     # Parse arguments
-    args = parser.parse_args(args)
+    args = mainparser.parse_args(args)
     # Execute function
     args.func(args)
 
