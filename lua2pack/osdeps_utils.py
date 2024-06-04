@@ -2,37 +2,18 @@ from pkgutil import iter_modules
 
 def list_submodules(module):
     for submodule in iter_modules(module.__path__):
-        yield submodule.name
+        yield submodule.module_finder.find_module(submodule.name).load_module()
 
+from . import osdeps
+osdeps_submodules = [osdeps, *list_submodules(osdeps)]
 
-def os_specific_generate_args(parser):
-    parser.add_argument("--system", help="System name")
-    parser.add_argument("--arch", help="Architecture name")
-    parser.add_argument('--name', help="Override default name")
+def generate_args(parser):
+    '''add generate command arguments'''
+    for i in osdeps_submodules:
+        if hasattr(i, 'generate_args'):
+            i.generate_args(parser)
 
-def os_specific_lua_code(args):
-    system = args.system or platform.system()
-    machine = args.arch or platform.machine()
-    name = args.name
-    name = repr(name) if name else "'lua-'..package"
-
-    return f"""
-
-prefix = package .. '-' .. version
-source = prefix .. '.tar.gz'
-rockspec = prefix .. '.rockspec'
-major, minor = string.match(version, "(.-)%-(.*)")
-system = {repr(system)}
-arch = {repr(machine)}
-
-name = {name}
-
-subpackages = true
-autogen = false
-filelist = true
-skip_build_dependencies = false
-skip_check_dependencies = false
-template = 'opensuse.spec'
-
-"""
+def lua_code(args):
+    '''add lua code'''
+    return "\n".join([module.lua_code(args) for module in osdeps_modules if hasattr(module, 'lua_code')])
 

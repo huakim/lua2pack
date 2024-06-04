@@ -6,7 +6,7 @@ import urllib.request
 import argparse
 from jinja2_easy.generator import Generator
 from os import getcwd
-from .osdeps_utils import os_specific_code, os_specific_args
+from .osdeps_utils import lua_code as os_specific_code, generate_args as os_specific_args
 
 def read_rockspec(path_or_uri):
     content = None
@@ -75,7 +75,7 @@ def custom_dependency(args, name, cache):
     return True
 
 # Create requirement duplicates
-duplicates = (lambda array: ['add_'+i for i in array] + ['add_luarock_'+i for i in array]) (list(map(lambda a: a+"_requires", ('build', 'check', 'preun', 'pre', 'postun', 'post', 'pretrans', 'posttrans')), 'requires', 'provides', 'recommends'))
+duplicates = (lambda array: ['add_'+i for i in array] + ['add_luarock_'+i for i in array]) ((*map(lambda a: a+"_requires", ('build', 'check', 'preun', 'pre', 'postun', 'post', 'pretrans', 'posttrans')), 'requires', 'provides', 'recommends'))
 
 def main(args=None):
     # Create the parser
