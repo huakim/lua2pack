@@ -15,5 +15,5 @@ def generate_args(parser):
 
 def lua_code(args):
     '''add lua code'''
-    return "\n".join([module.lua_code(args) for module in osdeps_modules if hasattr(module, 'lua_code')])
+    return "\n".join([module.lua_code(args) for module in osdeps_submodules if hasattr(module, 'lua_code')])
 

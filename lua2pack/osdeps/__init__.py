@@ -1,4 +1,4 @@
-
+import platform
 def generate_args(parser):
     '''add generate command arguments'''
     parser.add_argument("--system", help="System name")

@@ -6,7 +6,7 @@ import urllib.request
 import argparse
 from jinja2_easy.generator import Generator
 from os import getcwd
-from .osdeps_utils import lua_code as os_specific_code, generate_args as os_specific_generate_args
+from .osdeps_utils import lua_code as os_specific_lua_code, generate_args as os_specific_generate_args
 
 def read_rockspec(path_or_uri):
     content = None
@@ -54,12 +54,12 @@ class generate_rockspec(Generator):
         # execute code
         lua.execute(luaprog)
         # get lua globals
-        rockspec = lua.globals()
+        return lua.globals()
     # function used for generating from template
     def __call__(generator, args):
         rockspec = generator.rockspec(args)
         template = args.template or rockspec.template
-        filename = args.filename or generator.default_file_output('lua-'+rockspec.name, template)
+        filename = args.filename or generator.default_file_output(rockspec.name, template)
         generator.write_template(rockspec, template, filename)
 
 
