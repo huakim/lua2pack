@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
  name="lua2pack",
- version="0.0.1",
+ version="0.0.3",
  description = "Generate RPM spec files from luarocks",
  summary = "Generate RPM spec files from luarocks",
  license = "GPLv3",
