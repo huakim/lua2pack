@@ -7,33 +7,38 @@ from pathlib import Path
 import argparse
 from jinja2_easy.generator import Generator
 from .osdeps_utils import lua_code as os_specific_lua_code, generate_args as os_specific_generate_args
-from os.path import isdir
+from os.path import isdir, isfile
 from os import chdir
 
 def read_rockspec(path_or_uri):
+    from glob import glob
     content = None
-
+    stw = path_or_uri.startswith
     if path_or_uri == "<stdin>":
         # Read from stdin
-        content = sys.stdin.read()
-    elif path_or_uri[:5] == "text:":
+        return sys.stdin.read()
+    elif stw('glob:'):
+        path_or_uri = path_or_uri[5:]
+        # Get files from glob
+        files = [i for i in glob(path_or_uri, recursive=True) if isfile(i)]
+        # If files not found
+        if not files:
+            raise FileNotFoundError("Error: didn't found files by glob {}".format(path_or_uri))
+    elif stw("text:"):
         # Return text
         return path_or_uri[5:]
-    elif path_or_uri.startswith("http://") or path_or_uri.startswith("https://"):
+    elif stw("http://") or stw("https://"):
         # Read from a URI
         try:
-            response = urllib.request.urlopen(path_or_uri)
-            content = response.read().decode('utf-8')
+            return urllib.request.urlopen(path_or_uri).read().decode('utf-8')
         except urllib.error.HTTPError as e:
             raise Exception("Error reading rockspec from URI: {} (HTTP {})".format(path_or_uri, e.code))
     else:
-        # Read from a local file
-        try:
-            with open(path_or_uri, 'r') as file:
-                content = file.read()
-        except FileNotFoundError:
-            raise Exception("Error reading rockspec file: {}".format(path_or_uri))
-
+        files = [path_or_uri]
+    content = ''
+    for path_or_uri in files:
+        with open(path_or_uri, 'r') as file:
+            content += file.read() + "\n"
     return content
 
 class generate_rockspec(Generator):
@@ -41,7 +46,6 @@ class generate_rockspec(Generator):
         super().__init__(*args, **kwargs)
     # function used for generating rockspec specification
     def rockspec(generator, args):
-
         # get rockspec path
         rockspec_path = args.rockspec
         luacode = args.luacode or []
@@ -50,7 +54,7 @@ class generate_rockspec(Generator):
         newline="\n"
         # generate lua code (luarocks rockspec contains an lua compatible code)
         luaprog = f'''
-{read_rockspec(rockspec_path)}
+{newline.join(read_rockspec(rockspec_path_i) for rockspec_path_i in rockspec_path)}
 {os_specific_lua_code(args)}
 {newline.join([cache[a]  for a in duplicates if custom_dependency(args, a, cache)] + luacode + [a[0] + '=' + a[1] for a in defines if len(a) >  1])}
 '''
@@ -98,7 +102,7 @@ def main(args=None):
     generator = generate_rockspec('lua2pack', __path__[0])
     # Define the command-line arguments
     # Rockspec file
-    parser.add_argument("--rockspec", help="Path to the rockspec file or URI", default='text:')
+    parser.add_argument("--rockspec", help="Path to the rockspec file or URI", type=str, action='append')
     # Define lua parameters
     parser.add_argument("--define", help="Override some lua parameters", type=str, action='append', nargs='*')
     # Add specific lua code
@@ -106,7 +110,6 @@ def main(args=None):
     # Add duplicates
     for i in duplicates:
         parser.add_argument('--'+i.replace('_', '-'), help=f"Additional {i.replace('_', ' ')} dependencies to be added", type=str, action='append')
-
     os_specific_generate_args(parser)
 
     # Template file for generate command

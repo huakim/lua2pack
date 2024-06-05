@@ -10,19 +10,21 @@ class LuaBool():
         self.__a = bool(a)
     def __bool__(self):
         return self.__a
-    def __str__(self):
+    def __repr__(self):
         return 'true' if self else 'false'
+    def __str__(self):
+        return self.__repr__()
 
 def is_enabled_array(array, default=False, revert=False):
     if not array is None:
-        default = array[1] == 'enable' if len(array) > 0 else True
+        default = array[0] == 'enable' if len(array) > 0 else True
         if revert:
             default = not default
     return LuaBool(default)
 
 def is_enabled_flag(arg, not_arg, default):
-    return is_enabled_array(not_arg if default else arg,
-        is_enabled_array(arg if default else not_arg,
+    return is_enabled_array(arg if default else not_arg,
+        is_enabled_array(not_arg if default else arg,
             default, default), not default)
 
 def lua_code(args):
