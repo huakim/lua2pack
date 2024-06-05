@@ -16,9 +16,9 @@ def read_rockspec(path_or_uri):
     if path_or_uri == "<stdin>":
         # Read from stdin
         content = sys.stdin.read()
-    elif path_or_uri == "<none>":
-        # Return empty string
-        return ''
+    elif path_or_uri[:5] == "text:":
+        # Return text
+        return path_or_uri[5:]
     elif path_or_uri.startswith("http://") or path_or_uri.startswith("https://"):
         # Read from a URI
         try:
@@ -51,8 +51,8 @@ class generate_rockspec(Generator):
         # generate lua code (luarocks rockspec contains an lua compatible code)
         luaprog = f'''
 {read_rockspec(rockspec_path)}
-{newline.join([cache[a]  for a in duplicates if custom_dependency(args, a, cache)] + luacode + [a[0] + '=' + a[1] for a in defines if len(a) >  1])}
 {os_specific_lua_code(args)}
+{newline.join([cache[a]  for a in duplicates if custom_dependency(args, a, cache)] + luacode + [a[0] + '=' + a[1] for a in defines if len(a) >  1])}
 '''
         # create lua runtime
         lua = lupa.LuaRuntime()
@@ -98,7 +98,7 @@ def main(args=None):
     generator = generate_rockspec('lua2pack', __path__[0])
     # Define the command-line arguments
     # Rockspec file
-    parser.add_argument("--rockspec", help="Path to the rockspec file or URI", default='<none>')
+    parser.add_argument("--rockspec", help="Path to the rockspec file or URI", default='text:')
     # Define lua parameters
     parser.add_argument("--define", help="Override some lua parameters", type=str, action='append', nargs='*')
     # Add specific lua code

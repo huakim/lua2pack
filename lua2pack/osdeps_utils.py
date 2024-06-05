@@ -5,7 +5,7 @@ def list_submodules(module):
         yield submodule.module_finder.find_module(submodule.name).load_module()
 
 from . import osdeps
-osdeps_submodules = [osdeps, *list_submodules(osdeps)]
+osdeps_submodules = [*list_submodules(osdeps), osdeps]
 
 def generate_args(parser):
     '''add generate command arguments'''
