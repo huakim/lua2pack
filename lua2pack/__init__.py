@@ -68,8 +68,8 @@ class generate_rockspec(Generator):
     def __call__(generator, args):
         rockspec = generator.rockspec(args)
         template = args.template or rockspec.template
-        filename = args.filename or generator.default_file_output(rockspec.name, template)
-        outdir = args.outdir
+        filename = args.filename or rockspec.filename or generator.default_file_output(rockspec.name, template)
+        outdir = args.outdir or rockspec.outdir
         if outdir and isdir(outdir):
             chdir(outdir)
         generator.write_template(rockspec, template, filename)

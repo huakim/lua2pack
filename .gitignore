@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+lua2pack/lua-cjson
+
 # Tar archives
 *.tar.*
 **/*.tar.*
