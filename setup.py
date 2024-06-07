@@ -6,7 +6,7 @@ setup(
  name="lua2pack",
  package_data={'': ['lua2pack/templates/*']},
  include_package_data=True,
- version="0.0.6",
+ version="0.0.7",
  description = "Generate RPM or DSC spec files from luarocks",
  summary = "This utility is used for generating files of specific template from luarocks",
  license = "GPLv3",
