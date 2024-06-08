@@ -1,2 +1,3 @@
 include LICENSE
 include lua2pack/templates/*
+include *.py

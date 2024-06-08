@@ -21,7 +21,7 @@ BuildRequires: lua-devel
 Version: %{luarock_pkg_major}
 Release: %{luarock_pkg_minor}
 Summary: {{ description.summary }}
-Url: {{ description.license }}
+Url: {{ description.homepage }}
 License: {{ description.license }}
 
 {%- if not autogen %}
@@ -119,7 +119,7 @@ BuildRequires: %{luadist {{ add_luarock_check_requires[dep] }}}
 %endif
 {%- endif %}
 
-Source0: {{ source }}
+Source0: {{ archive }}
 Source1: {{ rockspec }}
 
 {%- if autogen %}

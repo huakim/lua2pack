@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import platform
-import lupa
+from .lua_runtime import LuaRuntime
 import sys
 import urllib.request
 from pathlib import Path
@@ -9,6 +9,7 @@ from jinja2_easy.generator import Generator
 from .osdeps_utils import lua_code as os_specific_lua_code, generate_args as os_specific_generate_args
 from os.path import isdir, isfile
 from os import chdir
+from .osdeps import LuaMapping
 
 def read_rockspec(path_or_uri):
     from glob import glob
@@ -59,7 +60,7 @@ class generate_rockspec(Generator):
 {newline.join([cache[a]  for a in duplicates if custom_dependency(args, a, cache)] + luacode + [a[0] + '=' + a[1] for a in defines if len(a) >  1])}
 '''
         # create lua runtime
-        lua = lupa.LuaRuntime()
+        lua = LuaRuntime()
         # execute code
         lua.execute(luaprog)
         # get lua globals
@@ -72,7 +73,7 @@ class generate_rockspec(Generator):
         outdir = args.outdir or rockspec.outdir
         if outdir and isdir(outdir):
             chdir(outdir)
-        generator.write_template(rockspec, template, filename)
+        generator.write_template(LuaMapping(rockspec), template, filename)
 
 
 def custom_dependency(args, name, cache):
