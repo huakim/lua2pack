@@ -15,5 +15,5 @@ setup(
             'lua2pack = lua2pack:main'
          ],
       },
-      install_requires=['jinja2-easy.generator', 'lupa'],
+      install_requires=['jinja2-easy.generator', 'lupa', 'luadata', 'toposort'],
 )
