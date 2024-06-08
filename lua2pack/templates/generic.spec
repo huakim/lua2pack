@@ -169,11 +169,11 @@ Source1: {{ rockspec }}
 {%- if not autogen_scriplets and build.install.bin %}
 %post %{?lua_scriplets}
 {%- for dep in build.install.bin %}
-update-alternatives --install %{_bindir}/{{ dep }} {{ dep }} %{luarocks_treedir}/bin/{{ dep }} 25
+update-alternatives --install %{_bindir}/{{ dep }} {{ dep }} %{luarocks_treedir}/%{luarock_pkg_name}/%{luarock_pkg_version}/bin/{{ dep }} 25
 {%- endfor %}
 %postun %{?lua_scriplets}
 {%- for dep in build.install.bin %}
-update-alternatives --remove {{ dep }} %{luarocks_treedir}/bin/{{ dep }}
+update-alternatives --remove {{ dep }} %{luarocks_treedir}/%{luarock_pkg_name}/%{luarock_pkg_version}/bin/{{ dep }}
 {%- endfor %}
 {%- endif %}
 
