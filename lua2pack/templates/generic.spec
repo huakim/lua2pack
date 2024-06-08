@@ -31,7 +31,7 @@ Provides: %{luadist %{luarock_pkg_name} = %{luarock_pkg_version}}
 Requires: %{luadist {{ dependencies[dep] }}}
 {%- endfor %}
 {%- for dep in build_dependencies %}
-BuildRequires: %{luadist {{ build_dependencies[dep] }}}
+BuildRequires: %{lua_module {{ build_dependencies[dep] }}}
 {%- endfor %}
 {%- endif %}
 {%- else %}
@@ -43,7 +43,7 @@ Requires: %{luadist {{ add_luarock_requires[dep] }}}
 {%- endfor %}
 {%- if not skip_build_dependencies %}
 {%- for dep in add_luarock_build_requires %}
-BuildRequires: %{luadist {{ add_luarock_build_requires[dep] }}}
+BuildRequires: %{lua_module {{ add_luarock_build_requires[dep] }}}
 {%- endfor %}
 {%- endif %}
 {%- for dep in add_luarock_preun_requires %}
@@ -107,14 +107,14 @@ Recommends: {{ add_recommends[dep] }}
 %if %{with check}
 {%- if not autogen %}
 {%- for dep in test_dependencies %}
-BuildRequires: %{luadist {{ test_dependencies[dep] }}}
+BuildRequires: %{lua_module {{ test_dependencies[dep] }}}
 {%- endfor %}
 {%- endif %}
 {%- for dep in add_check_requires %}
 BuildRequires: {{ add_check_requires[dep] }}
 {%- endfor %}
 {%- for dep in add_luarock_check_requires %}
-BuildRequires: %{luadist {{ add_luarock_check_requires[dep] }}}
+BuildRequires: %{lua_module {{ add_luarock_check_requires[dep] }}}
 {%- endfor %}
 %endif
 {%- endif %}
