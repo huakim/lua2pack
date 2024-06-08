@@ -181,7 +181,7 @@ commit: {commit}"""
 def test_obsinfo_generated():
     # Test that the .obsinfo file is generated correctly
     a = MappingTest()
-
+    # a - command line arguments object, parsed by argparse
     a.rockspec = [text_test_rockspec]
     a.define=[
         ['mtime', sr(mtime)],
