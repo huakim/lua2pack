@@ -1,0 +1,4 @@
+name: {{ package }}
+version: {{ version }}
+mtime: {{ mtime }}
+commit: {{ commit }}
