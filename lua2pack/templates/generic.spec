@@ -13,10 +13,15 @@ BuildRequires: luarocks-macros
 {%- if subpackages %}
 BuildRequires: luarocks-subpackages-macros
 {%- endif %}
+
 %if %{defined luarock_requires}
 %luarock_requires
 %else
-BuildRequires: lua-devel
+BuildRequires: %{lua_module luarocks}
+BuildRequires: %{lua_module devel}
+BuildRequires: gcc-c++
+BuildRequires: gcc
+BuildRequires: make
 %endif
 Version: %{luarock_pkg_major}
 Release: %{luarock_pkg_minor}

@@ -2,112 +2,33 @@
 import platform
 from .lua_runtime import LuaRuntime
 import sys
-import urllib.request
 from pathlib import Path
 import argparse
-from .osdeps_utils import lua_code as os_specific_lua_code, generate_args as os_specific_generate_args
+from .osdeps_utils import lua_code as os_specific_lua_code, generate_args as os_specific_generate_args, mount_adapter
 from os.path import isdir, isfile
 from os import chdir
 from .osdeps import LuaMapping
 from os import path, listdir
-import jinja2
+from jinja2_easy.generator import Generator
 import platformdirs
 
-class Generator:
-    def __init__(self, name, dir=path.dirname(path.abspath(__file__))):
-        self.name = name
-        self.dir = dir
-
-    def default_file_template(self):
-        return self.file_template_list()[0]
-
-    @staticmethod
-    def default_file_output(name, template):
-        a = template.rsplit('.')
-        if (len(a)) > 1:
-            return name+'.'+a[1]
-        else:
-            return name
-
-    def write_template(self, data, template, filename):
-     #   if not filename:
-     #       filename = "python-" + name + '.' + template.rsplit('.', 1)[1]   # take template file ending
-        result = self.render(data, template)
-        outfile = open(filename, 'wb')
-        try:
-            outfile.write(result)
-        finally:
-            outfile.close()
-
-    def render(self, data, template):
-   #     if not template:
-   #         template = self.file_template_list()[0]
-        env = self.prepare_template_env()
-        template = env.get_template(template)
-        return template.render(data).encode('utf-8')
-
-    def get_template_dirs(self):
-
-        """existing directories where to search for jinja2 templates. The order
-    is important. The first found template from the first found dir wins!"""
-        name=self.name
-        return filter(lambda x: path.exists(x), [
-            path.join(i, "templates") for i in (
-        # user dir
-            path.join(path.expanduser('~'), f".{name}"),
-            platformdirs.user_data_dir(appname=name),
-            platformdirs.user_config_dir(appname=name),
-        # usually inside the site-packages dir
-            self.dir,
-        # system wide dir
-            *platformdirs.site_data_dir(appname=name, multipath=True).split(":"),
-        )])
-
-    def prepare_template_env(self):
-    # setup jinja2 environment with custom filters
-        env = jinja2.Environment(loader=jinja2.FileSystemLoader(self.get_template_dirs()))
-        env.filters['parenthesize_version'] = \
-            lambda s: re.sub('([=<>]+)(.+)', r' (\1 \2)', s)
-        env.filters['basename'] = \
-            lambda s: s[s.rfind('/') + 1:]
-        return env
-
-    def file_template_list(self):
-        template_files = []
-        for d in self.get_template_dirs():
-            template_files += [f for f in listdir(d) if not f.startswith('.')]
-        return template_files
+from requests import Session
+from requests.exceptions import RequestException
+from requests_file import FileAdapter
+from requests_text import TextAdapter
+from requests_stdin import StdinAdapter
 
 def read_rockspec(path_or_uri):
-    from glob import glob
-    content = None
-    stw = path_or_uri.startswith
-    if path_or_uri == "<stdin>":
-        # Read from stdin
-        return sys.stdin.read()
-    elif stw('glob:'):
-        path_or_uri = path_or_uri[5:]
-        # Get files from glob
-        files = [i for i in glob(path_or_uri, recursive=True) if isfile(i)]
-        # If files not found
-        if not files:
-            raise FileNotFoundError("Error: didn't found files by glob {}".format(path_or_uri))
-    elif stw("text:"):
-        # Return text
-        return path_or_uri[5:]
-    elif stw("http://") or stw("https://"):
-        # Read from a URI
-        try:
-            return urllib.request.urlopen(path_or_uri).read().decode('utf-8')
-        except urllib.error.HTTPError as e:
-            raise Exception("Error reading rockspec from URI: {} (HTTP {})".format(path_or_uri, e.code))
-    else:
-        files = [path_or_uri]
-    content = ''
-    for path_or_uri in files:
-        with open(path_or_uri, 'r') as file:
-            content += file.read() + "\n"
-    return content
+    s = Session()
+    s.mount('file://', FileAdapter())
+    s.mount('text://', TextAdapter())
+    s.mount('stdin://',StdinAdapter())
+    mount_adapter(s)
+    try:
+        return s.get(path_or_url).text
+    except RequestException:
+        return open(path_or_url, 'r').read()
+
 
 class generate_rockspec(Generator):
     def __init__(self, *args, **kwargs):

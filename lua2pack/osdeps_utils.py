@@ -67,16 +67,26 @@ class SortedOsdepsModules:
 
 osdeps_submodules = list(SortedOsdepsModules(import_submodules(osdeps), osdeps, 'requires_osdeps'))
 
-osdeps_update_globals = [i.update_globals for i in [osdeps, *osdeps_submodules] if hasattr(i, 'update_globals')]
+def get_osdeps_functions(name):
+    return [ getattr(i, name) for i in [osdeps, *SortedOsdepsModules(osdeps_submodules, osdeps, 'requires_'+name)] if hasattr(i, name)]
 
-osdeps_generate_args = [ i.generate_args for i in [osdeps, *SortedOsdepsModules(osdeps_submodules, osdeps, 'requires_generate_args')] if hasattr(i, 'generate_args')]
+osdeps_update_globals = get_osdeps_functions('update_globals')
 
-osdeps_lua_code = [ i.lua_code for i in [osdeps, *SortedOsdepsModules(osdeps_submodules, osdeps, 'requires_lua_code')] if hasattr(i, 'lua_code')]
+osdeps_generate_args = get_osdeps_functions('generate_args')
+
+osdeps_lua_code = get_osdeps_functions('lua_code')
+
+osdeps_mount_adapter = get_osdeps_functions('mount_adapter')
 
 def update_globals(global_dict):
     '''update globals'''
     for func in osdeps_update_globals:
         global_dict.update(func())
+
+def mount_adapter(session):
+    '''mount adapters if found'''
+    for func in osdeps_mount_adapter:
+        func(session)
 
 def generate_args(parser):
     '''add generate command arguments'''
