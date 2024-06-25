@@ -1,17 +1,16 @@
-%define luarock_pkg_name lua-cjson
-%define luarock_pkg_version 2.1.0.11-1
-%define luarock_pkg_prefix lua-cjson-2.1.0.11-1
-%define luarock_pkg_major 2.1.0.11
-%define luarock_pkg_minor 1
-%global __luarock_requires %{_bindir}/true
-%global __luarock_provides %{_bindir}/true
+%define luarocks_pkg_name lua-cjson
+%define luarocks_pkg_version 2.1.0.11-1
+%define luarocks_pkg_prefix lua-cjson-2.1.0.11-1
+%define luarocks_pkg_major 2.1.0.11
+%define luarocks_pkg_minor 1
+%global __luarocks_requires %{_bindir}/true
+%global __luarocks_provides %{_bindir}/true
 
 Name: lua-cjson
-BuildRequires: luarocks-macros
-BuildRequires: luarocks-subpackages-macros
+BuildRequires: lua-rpm-macros
 
-%if %{defined luarock_requires}
-%luarock_requires
+%if %{defined luarocks_requires}
+%luarocks_requires
 %else
 BuildRequires: %{lua_module luarocks}
 BuildRequires: %{lua_module devel}
@@ -19,17 +18,17 @@ BuildRequires: gcc-c++
 BuildRequires: gcc
 BuildRequires: make
 %endif
-Version: %{luarock_pkg_major}
-Release: %{luarock_pkg_minor}
+Version: %{luarocks_pkg_major}
+Release: %{luarocks_pkg_minor}
 Summary: A fast JSON encoding/parsing module
 Url: http://www.kyne.com.au/~mark/software/lua-cjson.php
 License: MIT
-Provides: %{luadist %{luarock_pkg_name} = %{luarock_pkg_version}}
+Provides: %{luadist %{luarocks_pkg_name} = %{luarocks_pkg_version}}
 Requires: %{luadist lua >= 5.1}
 
 Source0: lua-cjson-2.1.0.11-1.tar.gz
 Source1: lua-cjson-2.1.0.11-1.rockspec
-%{?luarock_subpackages:%luarock_subpackages -f}
+%{?luarocks_subpackages:%luarocks_subpackages -f}
 
 %description
         The Lua CJSON module provides JSON support for Lua. It features:
@@ -40,7 +39,7 @@ Source1: lua-cjson-2.1.0.11-1.rockspec
         - No dependencies on other libraries
 
 %prep
-%autosetup -p1 -n %luarock_pkg_prefix
+%autosetup -p1 -n %luarocks_pkg_prefix
 %luarocks_prep
 
 %generate_buildrequires
@@ -51,7 +50,7 @@ Source1: lua-cjson-2.1.0.11-1.rockspec
 
 %install
 %{?luarocks_subpackages_install}
-%{!?luarocks_subpackages_install:%luarocks_install %{luarock_pkg_prefix}.*.rock}
+%{!?luarocks_subpackages_install:%luarocks_install %{luarocks_pkg_prefix}.*.rock}
 %{?lua_generate_file_list}
 %check
 %if %{with check}

@@ -162,7 +162,10 @@ def test_rockspec_generated():
     with open('lua-cjson.spec','r') as read:
         spec_text3 = read.read()
 
-    assert spec_text1 == spec_text2 == spec_text3 == test_spec_content
-    test_lua2pack_imports()
+    if os.environ.get('GENERATE_TEST') == 'yes':
+        os.rename('lua-cjson.spec', 'test_spec_content.txt')
+    else:
+        assert spec_text1 == spec_text2 == spec_text3 == test_spec_content
+        test_lua2pack_imports()
 
 #def test_spec_generated():
