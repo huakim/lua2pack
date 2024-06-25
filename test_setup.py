@@ -9,69 +9,7 @@ from lua2pack.osdeps import obsinfo
 from luadata import serialize as sr
 
 # Define the test spec content, that must be generated
-test_spec_content = r"""%define luarock_pkg_name lua-cjson
-%define luarock_pkg_version 2.1.0.11-1
-%define luarock_pkg_prefix lua-cjson-2.1.0.11-1
-%define luarock_pkg_major 2.1.0.11
-%define luarock_pkg_minor 1
-%global __luarock_requires %{_bindir}/true
-%global __luarock_provides %{_bindir}/true
-
-Name: lua-cjson
-BuildRequires: luarocks-macros
-BuildRequires: luarocks-subpackages-macros
-%if %{defined luarock_requires}
-%luarock_requires
-%else
-BuildRequires: lua-devel
-%endif
-Version: %{luarock_pkg_major}
-Release: %{luarock_pkg_minor}
-Summary: A fast JSON encoding/parsing module
-Url: http://www.kyne.com.au/~mark/software/lua-cjson.php
-License: MIT
-Provides: %{luadist %{luarock_pkg_name} = %{luarock_pkg_version}}
-Requires: %{luadist lua >= 5.1}
-
-Source0: lua-cjson-2.1.0.11-1.tar.gz
-Source1: lua-cjson-2.1.0.11-1.rockspec
-%{?luarock_subpackages:%luarock_subpackages -f}
-
-%description
-        The Lua CJSON module provides JSON support for Lua. It features:
-        - Fast, standards compliant encoding/parsing routines
-        - Full support for JSON with UTF-8, including decoding surrogate pairs
-        - Optional run-time support for common exceptions to the JSON specification
-          (infinity, NaN,..)
-        - No dependencies on other libraries
-
-%prep
-%autosetup -p1 -n %luarock_pkg_prefix
-%luarocks_prep
-
-%generate_buildrequires
-
-%build
-%{?luarocks_subpackages_build}
-%{!?luarocks_subpackages_build:%luarocks_build}
-
-%install
-%{?luarocks_subpackages_install}
-%{!?luarocks_subpackages_install:%luarocks_install %{luarock_pkg_prefix}.*.rock}
-%{?lua_generate_file_list}
-%check
-%if %{with check}
-%{?luarocks_check}
-%endif
-%post %{?lua_scriplets}
-update-alternatives --install %{_bindir}/json2lua json2lua %{luarocks_treedir}/bin/json2lua 25
-update-alternatives --install %{_bindir}/lua2json lua2json %{luarocks_treedir}/bin/lua2json 25
-%postun %{?lua_scriplets}
-update-alternatives --remove json2lua %{luarocks_treedir}/bin/json2lua
-update-alternatives --remove lua2json %{luarocks_treedir}/bin/lua2json
-
-%files %{?lua_files}%{!?lua_files:-f lua_files.list}"""
-
+test_spec_content = open('test_spec_content.txt','r').read()
 # Define the test rockspec content
 test_rockspec_content = r"""
 package = "lua-cjson"
@@ -136,7 +74,7 @@ build = {
 """
 
 # Create a text test rockspec
-text_test_rockspec = f'text:{test_rockspec_content}'
+text_test_rockspec = f'text://{test_rockspec_content}'
 
 # Generate a rockspec using the test_case and lua2pack directory
 generator = generate_rockspec('test_case', os.path.join(os.getcwd(), 'lua2pack'))
