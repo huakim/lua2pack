@@ -1,5 +1,5 @@
 import platform
-from requests_file import FileAdapter
+from requests_glob import GlobAdapter
 
 def generate_args(parser):
     '''add generate command arguments'''
@@ -25,7 +25,7 @@ def is_enabled_flag(arg, not_arg, default):
 
 
 def mount_adapter(adapter):
-    adapter.mount('glob://', FileAdapter(query={'glob':'yes'}))
+    adapter.mount('glob://', GlobAdapter())
 
 def lua_code(args):
     '''add lua code'''
