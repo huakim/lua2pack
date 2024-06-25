@@ -166,6 +166,6 @@ def test_rockspec_generated():
         os.rename('lua-cjson.spec', 'test_spec_content.txt')
     else:
         assert spec_text1 == spec_text2 == spec_text3 == test_spec_content
-        test_lua2pack_imports()
+    test_lua2pack_imports()
 
 #def test_spec_generated():
