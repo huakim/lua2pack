@@ -1,21 +1,18 @@
-%define luarock_pkg_name {{ package }}
-%define luarock_pkg_version {{ version }}
-%define luarock_pkg_prefix {{ prefix }}
-%define luarock_pkg_major {{ major }}
-%define luarock_pkg_minor {{ minor }}
+%define luarocks_pkg_name {{ package }}
+%define luarocks_pkg_version {{ version }}
+%define luarocks_pkg_prefix {{ prefix }}
+%define luarocks_pkg_major {{ major }}
+%define luarocks_pkg_minor {{ minor }}
 {%- if not autogen %}
-%global __luarock_requires %{_bindir}/true
-%global __luarock_provides %{_bindir}/true
+%global __luarocks_requires %{_bindir}/true
+%global __luarocks_provides %{_bindir}/true
 {%- endif %}
 
 Name: {{ name }}
-BuildRequires: luarocks-macros
-{%- if subpackages %}
-BuildRequires: luarocks-subpackages-macros
-{%- endif %}
+BuildRequires: lua-rpm-macros
 
-%if %{defined luarock_requires}
-%luarock_requires
+%if %{defined luarocks_requires}
+%luarocks_requires
 %else
 BuildRequires: %{lua_module luarocks}
 BuildRequires: %{lua_module devel}
@@ -23,14 +20,14 @@ BuildRequires: gcc-c++
 BuildRequires: gcc
 BuildRequires: make
 %endif
-Version: %{luarock_pkg_major}
-Release: %{luarock_pkg_minor}
+Version: %{luarocks_pkg_major}
+Release: %{luarocks_pkg_minor}
 Summary: {{ description.summary }}
 Url: {{ description.homepage }}
 License: {{ description.license }}
 
 {%- if not autogen %}
-Provides: %{luadist %{luarock_pkg_name} = %{luarock_pkg_version}}
+Provides: %{luadist %{luarocks_pkg_name} = %{luarocks_pkg_version}}
 {%- if not skip_build_dependencies %}
 {%- for dep in dependencies %}
 Requires: %{luadist {{ dependencies[dep] }}}
@@ -43,37 +40,37 @@ BuildRequires: %{lua_module {{ build_dependencies[dep] }}}
 BuildRequires: lua-generators
 {%- endif %}
 
-{%- for dep in add_luarock_requires %}
-Requires: %{luadist {{ add_luarock_requires[dep] }}}
+{%- for dep in add_luarocks_requires %}
+Requires: %{luadist {{ add_luarocks_requires[dep] }}}
 {%- endfor %}
 {%- if not skip_build_dependencies %}
-{%- for dep in add_luarock_build_requires %}
-BuildRequires: %{lua_module {{ add_luarock_build_requires[dep] }}}
+{%- for dep in add_luarocks_build_requires %}
+BuildRequires: %{lua_module {{ add_luarocks_build_requires[dep] }}}
 {%- endfor %}
 {%- endif %}
-{%- for dep in add_luarock_preun_requires %}
-Requires(preun): %{luadist {{ add_luarock_preun_requires[dep] }}}
+{%- for dep in add_luarocks_preun_requires %}
+Requires(preun): %{luadist {{ add_luarocks_preun_requires[dep] }}}
 {%- endfor %}
-{%- for dep in add_luarock_postun_requires %}
-Requires(postun): %{luadist {{ add_luarock_postun_requires[dep] }}}
+{%- for dep in add_luarocks_postun_requires %}
+Requires(postun): %{luadist {{ add_luarocks_postun_requires[dep] }}}
 {%- endfor %}
-{%- for dep in add_luarock_pretrans_requires %}
-Requires(pretrans): %{luadist {{ add_luarock_pretrans_requires[dep] }}}
+{%- for dep in add_luarocks_pretrans_requires %}
+Requires(pretrans): %{luadist {{ add_luarocks_pretrans_requires[dep] }}}
 {%- endfor %}
-{%- for dep in add_luarock_posttrans_requires %}
-Requires(posttrans): %{luadist {{ add_luarock_posttrans_requires[dep] }}}
+{%- for dep in add_luarocks_posttrans_requires %}
+Requires(posttrans): %{luadist {{ add_luarocks_posttrans_requires[dep] }}}
 {%- endfor %}
-{%- for dep in add_luarock_pre_requires %}
-Requires(pre): %{luadist {{ add_luarock_pre_requires[dep] }}}
+{%- for dep in add_luarocks_pre_requires %}
+Requires(pre): %{luadist {{ add_luarocks_pre_requires[dep] }}}
 {%- endfor %}
-{%- for dep in add_luarock_post_requires %}
-Requires(post): %{luadist {{ add_luarock_post_requires[dep] }}}
+{%- for dep in add_luarocks_post_requires %}
+Requires(post): %{luadist {{ add_luarocks_post_requires[dep] }}}
 {%- endfor %}
-{%- for dep in add_luarock_provides %}
-Provides: %{luadist {{ add_luarock_provides[dep] }}}
+{%- for dep in add_luarocks_provides %}
+Provides: %{luadist {{ add_luarocks_provides[dep] }}}
 {%- endfor %}
-{%- for dep in add_luarock_recommends %}
-Recommends: %{luadist {{ add_luarock_recommends[dep] }}}
+{%- for dep in add_luarocks_recommends %}
+Recommends: %{luadist {{ add_luarocks_recommends[dep] }}}
 {%- endfor %}
 {%- for dep in add_requires %}
 Requires: {{ add_requires[dep] }}
@@ -118,8 +115,8 @@ BuildRequires: %{lua_module {{ test_dependencies[dep] }}}
 {%- for dep in add_check_requires %}
 BuildRequires: {{ add_check_requires[dep] }}
 {%- endfor %}
-{%- for dep in add_luarock_check_requires %}
-BuildRequires: %{lua_module {{ add_luarock_check_requires[dep] }}}
+{%- for dep in add_luarocks_check_requires %}
+BuildRequires: %{lua_module {{ add_luarocks_check_requires[dep] }}}
 {%- endfor %}
 %endif
 {%- endif %}
@@ -132,19 +129,19 @@ Source1: {{ rockspec }}
 {%- endif %}
 
 {%- if subpackages %}
-%{?luarock_subpackages{% if filelist %}:%luarock_subpackages -f{% endif %}}
+%{?luarocks_subpackages{% if filelist %}:%luarocks_subpackages -f{% endif %}}
 {%- endif %}
 
 %description
 {{ description.detailed }}
 
 %prep
-%autosetup -p1 -n %luarock_pkg_prefix
+%autosetup -p1 -n %luarocks_pkg_prefix
 %luarocks_prep
 
 %generate_buildrequires
 {%- if autogen and (not (skip_build_dependencies and skip_check_dependencies)) %}
-%luarock_generate_buildrequires{% if not skip_check_dependencies %} -t{% endif %}
+%luarocks_generate_buildrequires{% if not skip_check_dependencies %} -t{% endif %}
 {%- endif %}
 
 %build
@@ -158,9 +155,9 @@ Source1: {{ rockspec }}
 %install
 {%- if subpackages %}
 %{?luarocks_subpackages_install}
-%{!?luarocks_subpackages_install:%luarocks_install %{luarock_pkg_prefix}.*.rock}
+%{!?luarocks_subpackages_install:%luarocks_install %{luarocks_pkg_prefix}.*.rock}
 {%- else %}
-%luarocks_install %{luarock_pkg_prefix}.*.rock
+%luarocks_install %{luarocks_pkg_prefix}.*.rock
 {%- endif %}
 {%- if filelist %}
 %{?lua_generate_file_list}
