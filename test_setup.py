@@ -218,7 +218,7 @@ def test_rockspec_generated():
 
 
     os.remove('lua-cjson.spec')
-    a.rockspec = [ 'glob:*-cjson-2.1.0.11-*.rockspec' ]
+    a.rockspec = [ 'glob://./*-cjson-2.1.0.11-*.rockspec' ]
     generator(a)
 
     with open('lua-cjson.spec','r') as read:

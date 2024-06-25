@@ -1,4 +1,6 @@
 import platform
+from requests_file import FileAdapter
+
 def generate_args(parser):
     '''add generate command arguments'''
     parser.add_argument("--system", help="System name")
@@ -20,6 +22,10 @@ def is_enabled_flag(arg, not_arg, default):
     return is_enabled_array(arg if default else not_arg,
         is_enabled_array(not_arg if default else arg,
             default, default), not default)
+
+
+def mount_adapter(adapter):
+    adapter.mount('glob://', FileAdapter(query={'glob':'yes'}))
 
 def lua_code(args):
     '''add lua code'''

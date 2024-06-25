@@ -29,7 +29,6 @@ def read_rockspec(path_or_uri):
     except RequestException:
         return open(path_or_url, 'r').read()
 
-
 class generate_rockspec(Generator):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
