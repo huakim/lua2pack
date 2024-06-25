@@ -23,6 +23,8 @@ Release: %{luarocks_pkg_minor}
 Summary: A fast JSON encoding/parsing module
 Url: http://www.kyne.com.au/~mark/software/lua-cjson.php
 License: MIT
+Requires(postun): alternatives
+Requires(post): alternatives
 Provides: %{luadist %{luarocks_pkg_name} = %{luarocks_pkg_version}}
 Requires: %{luadist lua >= 5.1}
 

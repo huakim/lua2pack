@@ -25,6 +25,10 @@ Release: %{luarocks_pkg_minor}
 Summary: {{ description.summary }}
 Url: {{ description.homepage }}
 License: {{ description.license }}
+{%- if build.install.bin %}
+Requires(postun): alternatives
+Requires(post): alternatives
+{%- endif %}
 
 {%- if not autogen %}
 Provides: %{luadist %{luarocks_pkg_name} = %{luarocks_pkg_version}}
