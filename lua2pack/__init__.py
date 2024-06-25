@@ -18,7 +18,7 @@ from requests_file import FileAdapter
 from requests_text import TextAdapter
 from requests_stdin import StdinAdapter
 
-def read_rockspec(path_or_uri):
+def read_rockspec(path_or_url):
     s = Session()
     s.mount('file://', FileAdapter())
     s.mount('text://', TextAdapter())
