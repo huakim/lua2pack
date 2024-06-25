@@ -75,7 +75,7 @@ def custom_dependency(args, name, cache):
     return True
 
 # Create requirement duplicates
-duplicates = (lambda array: ['add_'+i for i in array] + ['add_luarock_'+i for i in array]) ((*map(lambda a: a+"_requires", ('build', 'check', 'preun', 'pre', 'postun', 'post', 'pretrans', 'posttrans')), 'requires', 'provides', 'recommends'))
+duplicates = (lambda array: ['add_'+i for i in array] + ['add_luarocks_'+i for i in array]) ((*map(lambda a: a+"_requires", ('build', 'check', 'preun', 'pre', 'postun', 'post', 'pretrans', 'posttrans')), 'requires', 'provides', 'recommends'))
 
 def main(args=None):
     # Create the parser
