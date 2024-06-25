@@ -14,7 +14,7 @@ import platformdirs
 
 from requests import Session
 from requests.exceptions import RequestException
-from requests_file import FileAdapter
+from requests_glob import FileAdapter
 from requests_text import TextAdapter
 from requests_stdin import StdinAdapter
 
