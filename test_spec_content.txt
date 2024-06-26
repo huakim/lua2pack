@@ -59,10 +59,10 @@ Source1: lua-cjson-2.1.0.11-1.rockspec
 %{?luarocks_check}
 %endif
 %post %{?lua_scriplets}
-update-alternatives --install %{_bindir}/json2lua json2lua %{luarocks_treedir}/%{luarocks_pkg_name}/%{luarocks_pkg_version}/bin/json2lua 25
-update-alternatives --install %{_bindir}/lua2json lua2json %{luarocks_treedir}/%{luarocks_pkg_name}/%{luarocks_pkg_version}/bin/lua2json 25
+%add_lua_binary json2lua -p 25 -b %{_bindir}
+%add_lua_binary lua2json -p 25 -b %{_bindir}
 %postun %{?lua_scriplets}
-update-alternatives --remove json2lua %{luarocks_treedir}/%{luarocks_pkg_name}/%{luarocks_pkg_version}/bin/json2lua
-update-alternatives --remove lua2json %{luarocks_treedir}/%{luarocks_pkg_name}/%{luarocks_pkg_version}/bin/lua2json
+%drop_lua_binary json2lua
+%drop_lua_binary lua2json
 
 %files %{?lua_files}%{!?lua_files:-f lua_files.list}
