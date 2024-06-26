@@ -27,7 +27,7 @@ def lua_code(args):
     st = """
 filename = package .. '.obsinfo'
 """ if args.template == 'obs.obsinfo' else ''
-    return """
+    return st + """
 mtime = __get_current_timestamp()
 commit = __random_hex_numbers()
 """
