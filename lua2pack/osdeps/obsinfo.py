@@ -24,10 +24,14 @@ def generate_random_hex(length=40):
     return random_hex.lower()
 
 def lua_code(args):
+    st = """
+filename = package .. '.obsinfo'
+""" if args.template == 'obs.obsinfo' else ''
     return """
 mtime = __get_current_timestamp()
 commit = __random_hex_numbers()
 """
+
 
 def generate_timestamp():
     return int(time.time())
