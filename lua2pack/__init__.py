@@ -77,6 +77,9 @@ def custom_dependency(args, name, cache):
 # Create requirement duplicates
 duplicates = (lambda array: ['add_'+i for i in array] + ['add_luarocks_'+i for i in array]) ((*map(lambda a: a+"_requires", ('build', 'check', 'preun', 'pre', 'postun', 'post', 'pretrans', 'posttrans')), 'requires', 'provides', 'recommends'))
 
+# Define generator's template environment
+generator = generate_rockspec('lua2pack', __path__[0])
+
 def main(args=None):
     # Create the parser
     mainparser = argparse.ArgumentParser(description="A Python script that generates a rockspec file")
@@ -86,8 +89,6 @@ def main(args=None):
     subparsers = mainparser.add_subparsers(title='commands')
     # add generate command
     parser = subparsers.add_parser('generate', help="generate RPM spec or DEB dsc file for a rockspec specification")
-    # Define generator's template environment
-    generator = generate_rockspec('lua2pack', __path__[0])
     # Define the command-line arguments
     # Rockspec file
     parser.add_argument("--rockspec", help="Path to the rockspec file or URI", type=str, action='append')
