@@ -85,10 +85,14 @@ def main(args=None):
     mainparser = argparse.ArgumentParser(description="A Python script that generates a rockspec file")
     # set defaults
     mainparser.set_defaults(func=lambda *a: mainparser.print_help())
+    # add noop operation
+    mainparser.add_argument("--noop", help='', type=str, default='disable')
     # add subparsers
     subparsers = mainparser.add_subparsers(title='commands')
     # add generate command
     parser = subparsers.add_parser('generate', help="generate RPM spec or DEB dsc file for a rockspec specification")
+    # add noop operation
+    parser.add_argument("--noop", help='', type=str, default='disable')
     # Define the command-line arguments
     # Rockspec file
     parser.add_argument("--rockspec", help="Path to the rockspec file or URI", type=str, action='append')
@@ -111,6 +115,9 @@ def main(args=None):
     parser.set_defaults(func=generator)
     # Parse arguments
     args = mainparser.parse_args(args)
+    # Check if noop is enabled, if yes, then exit
+    if args.noop.lower() in ['enable', 'yes', 'true', 'y']:
+       return
     # Execute function
     args.func(args)
 
