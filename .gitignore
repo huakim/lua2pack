@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 lua2pack/lua-cjson
+lua2pack/templates/generic2.spec
 
 # Tar archives
 *.tar.*
