@@ -10,7 +10,9 @@
 
 Name: {{ name }}
 BuildRequires: lua-rpm-macros
-
+{%- if noarch %}
+BuildArch: noarch
+{%- endif %}
 %if %{defined luarocks_requires}
 %luarocks_requires
 %else
