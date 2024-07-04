@@ -114,6 +114,7 @@ BuildRequires: {{ add_check_requires[dep] }}
 
 {%- if autobuildreqs %}
 %generate_buildrequires
+%{?luarocks_base_buildrequires}
 {%- if not skip_build_dependencies %}
 %luarocks_generate_buildrequires
 {%- for dep in add_luarocks_build_requires}
