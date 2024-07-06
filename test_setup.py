@@ -9,7 +9,10 @@ from lua2pack.osdeps import obsinfo
 from luadata import serialize as sr
 
 # Define the test spec content, that must be generated
-test_spec_content = open('test_spec_content.txt','r').read()
+if os.environ.get('GENERATE_TEST') != 'yes':
+    test_spec_content = open('test_spec_content.txt','r').read()
+else:
+    test_spec_content = False
 # Define the test rockspec content
 test_rockspec_content = r"""
 package = "lua-cjson"
@@ -162,7 +165,7 @@ def test_rockspec_generated():
     with open('lua-cjson.spec','r') as read:
         spec_text3 = read.read()
 
-    if os.environ.get('GENERATE_TEST') == 'yes':
+    if not test_spec_content:
         os.rename('lua-cjson.spec', 'test_spec_content.txt')
     else:
         assert spec_text1 == spec_text2 == spec_text3 == test_spec_content

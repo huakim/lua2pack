@@ -16,6 +16,7 @@ BuildRequires: lua-rpm-macros
 Requires(postun): alternatives
 Requires(post): alternatives
 Provides: %{luadist %{luarocks_pkg_name} = %{luarocks_pkg_version}}
+
 {%- if not autoreqs %}
 %global __luarocks_requires %{_bindir}/true
 %global __luarocks_provides %{_bindir}/true

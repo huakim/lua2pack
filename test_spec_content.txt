@@ -15,6 +15,7 @@ Source1: lua-cjson-2.1.0.11-1.rockspec
 BuildRequires: lua-rpm-macros
 Requires(postun): alternatives
 Requires(post): alternatives
+Provides: %{luadist %{luarocks_pkg_name} = %{luarocks_pkg_version}}
 %global __luarocks_requires %{_bindir}/true
 %global __luarocks_provides %{_bindir}/true
 Requires: %{luadist lua >= 5.1}
