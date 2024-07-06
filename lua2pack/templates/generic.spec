@@ -106,6 +106,8 @@ BuildRequires: {{ add_check_requires[dep] }}
 {%- endif %}
 {%- if subpackages %}
 %{?luarocks_subpackages{% if filelist %}:%luarocks_subpackages -f{% endif %}}
+{%- else %}
+Provides: luadist(%{luarocks_pkg_name}) = %{luarocks_pkg_version}
 {%- endif %}
 
 %description

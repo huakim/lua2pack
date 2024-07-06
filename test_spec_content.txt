@@ -22,6 +22,7 @@ Requires: %{luadist lua >= 5.1}
 %if %{defined luarocks_buildrequires}
 BuildRequires: %{luarocks_buildrequires}
 %endif
+Provides: luadist(%{luarocks_pkg_name}) = %{luarocks_pkg_version}
 
 %description
         The Lua CJSON module provides JSON support for Lua. It features:
