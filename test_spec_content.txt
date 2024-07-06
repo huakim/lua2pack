@@ -3,34 +3,24 @@
 %define luarocks_pkg_prefix lua-cjson-2.1.0.11-1
 %define luarocks_pkg_major 2.1.0.11
 %define luarocks_pkg_minor 1
-%global __luarocks_requires %{_bindir}/true
-%global __luarocks_provides %{_bindir}/true
 
 Name: lua-cjson
-BuildRequires: lua-rpm-macros
-
-%if %{defined luarocks_requires}
-%luarocks_requires
-%else
-BuildRequires: %{lua_module luarocks}
-BuildRequires: %{lua_module devel}
-BuildRequires: gcc-c++
-BuildRequires: gcc
-BuildRequires: make
-%endif
 Version: %{luarocks_pkg_major}
 Release: %{luarocks_pkg_minor}
 Summary: A fast JSON encoding/parsing module
 Url: http://www.kyne.com.au/~mark/software/lua-cjson.php
 License: MIT
-Requires(postun): alternatives
-Requires(post): alternatives
-Provides: %{luadist %{luarocks_pkg_name} = %{luarocks_pkg_version}}
-Requires: %{luadist lua >= 5.1}
-
 Source0: lua-cjson-2.1.0.11-1.tar.gz
 Source1: lua-cjson-2.1.0.11-1.rockspec
-%{?luarocks_subpackages:%luarocks_subpackages -f}
+BuildRequires: lua-rpm-macros
+Requires(postun): alternatives
+Requires(post): alternatives
+%global __luarocks_requires %{_bindir}/true
+%global __luarocks_provides %{_bindir}/true
+Requires: %{luadist lua >= 5.1}
+%if %{defined luarocks_buildrequires}
+BuildRequires: %{luarocks_buildrequires}
+%endif
 
 %description
         The Lua CJSON module provides JSON support for Lua. It features:
@@ -41,19 +31,15 @@ Source1: lua-cjson-2.1.0.11-1.rockspec
         - No dependencies on other libraries
 
 %prep
-%autosetup -p1 -n %luarocks_pkg_prefix
+%autosetup -p1 -n %{luarocks_pkg_prefix}
 %luarocks_prep
 
-%generate_buildrequires
-
 %build
-%{?luarocks_subpackages_build}
-%{!?luarocks_subpackages_build:%luarocks_build}
+%luarocks_build
 
 %install
-%{?luarocks_subpackages_install}
-%{!?luarocks_subpackages_install:%luarocks_install %{luarocks_pkg_prefix}.*.rock}
-%{?lua_generate_file_list}
+%luarocks_install %{luarocks_pkg_prefix}.*.rock
+
 %check
 %if %{with check}
 %{?luarocks_check}
@@ -65,4 +51,4 @@ Source1: lua-cjson-2.1.0.11-1.rockspec
 %drop_lua_binary json2lua
 %drop_lua_binary lua2json
 
-%files %{?lua_files}%{!?lua_files:-f lua_files.list}
+%files %{?lua_files}
