@@ -13,7 +13,7 @@ def generate_args(parser):
     for i, d in (
       ('subpackages',True),
       ('filelist',True),
-      ('autobuildreqs',False),
+      ('autobuildreqs',True),
       ('autoreqs',False),
       ('autoalternatives',False),
       ('skip-build-dependencies',False),
