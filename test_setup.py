@@ -7,10 +7,13 @@ from lua2pack import generate_rockspec
 import os
 from lua2pack.osdeps import obsinfo
 from luadata import serialize as sr
-
+import sys
 # Define the test spec content, that must be generated
 if os.environ.get('GENERATE_TEST') != 'yes':
-    test_spec_content = open('test_spec_content.txt','r').read()
+    try:
+        test_spec_content = open('test_spec_content.txt','r').read()
+    except Exception:
+        test_spec_content = None
 else:
     test_spec_content = False
 # Define the test rockspec content
@@ -175,3 +178,6 @@ def test_noop():
     lua2pack.main(['generate', '--noop','enable'])
     lua2pack.main(['--noop','enable'])
 
+if 'pytest' not in sys.modules:
+    test_spec_content = None
+    test_rockspec_generated()

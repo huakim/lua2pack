@@ -37,10 +37,18 @@ Provides: luadist(%{luarocks_pkg_name}) = %{luarocks_pkg_version}
 %luarocks_prep
 
 %build
+%if %{defined luarocks_pkg_build}
+%luarocks_pkg_build %{lua_version}
+%else
 %luarocks_build
+%endif
 
 %install
+%if %{defined luarocks_pkg_install}
+%luarocks_pkg_install %{lua_version}
+%else
 %luarocks_install %{luarocks_pkg_prefix}.*.rock
+%endif
 
 %check
 %if %{with check}
