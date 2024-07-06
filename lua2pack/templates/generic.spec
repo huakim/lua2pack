@@ -17,6 +17,9 @@ Requires(postun): alternatives
 Requires(post): alternatives
 Provides: %{luadist %{luarocks_pkg_name} = %{luarocks_pkg_version}}
 
+{%- if custom_macros %}
+{{ custom_macros }}
+{%- endif %}
 {%- if not autoreqs %}
 %global __luarocks_requires %{_bindir}/true
 %global __luarocks_provides %{_bindir}/true
@@ -151,19 +154,34 @@ echo {{ add_check_requires[dep] }}
 
 %build
 {%- if subpackages %}
-%{?luarocks_subpackages_build}
-%{!?luarocks_subpackages_build:%luarocks_build}
-{%- else %}
+%if %{defined luarocks_subpackages_build}
+%{luarocks_subpackages_build}
+%else
+{%- endif %}
+%if %{defined luarocks_pkg_build}
+%luarocks_pkg_build %{lua_version}
+%else
 %luarocks_build
+%endif
+{%- if subpackages %}
+%endif
 {%- endif %}
 
 %install
 {%- if subpackages %}
-%{?luarocks_subpackages_install}
-%{!?luarocks_subpackages_install:%luarocks_install %{luarocks_pkg_prefix}.*.rock}
-{%- else %}
-%luarocks_install %{luarocks_pkg_prefix}.*.rock
+%if %{defined luarocks_subpackages_install}
+%{luarocks_subpackages_install}
+%else
 {%- endif %}
+%if %{defined luarocks_pkg_install}
+%luarocks_pkg_install %{lua_version}
+%else
+%luarocks_install %{luarocks_pkg_prefix}.*.rock
+%endif
+{%- if subpackages %}
+%endif
+{%- endif %}
+
 {%- if filelist %}
 %{?lua_generate_file_list}
 {%- endif %}
