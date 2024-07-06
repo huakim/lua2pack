@@ -1,21 +1,31 @@
 from . import is_enabled_flag_str as is_enabled_flag, store_flag
 
+lua_code_extend_array = []
+
+def lua_code_extend_flag_func(name, default):
+    name = name.replace('-','_')
+    noname = 'no_' + name
+    def _(args):
+        return name + ' = ' + is_enabled_flag(getattr(args, name), getattr(args, noname), default)
+    lua_code_extend_array.append(_)
+
 def generate_args(parser):
-    for i in ('subpackages', 'autogen', 'filelist', 'skip-build-dependencies', 'skip-check-dependencies'):
+    for i, d in (
+      ('subpackages',True),
+      ('filelist',True),
+      ('autobuildreqs',False),
+      ('autoreqs',False),
+      ('autoalternatives',False),
+      ('skip-build-dependencies',False),
+      ('skip-check-dependencies',False)):
         store_flag(parser, i)
+        lua_code_extend_flag_func(i, d)
 
 def lua_code(args):
-    return f"""
+    return '\n'.join([f"""
 
 prefix = package .. '-' .. version
 archive = prefix .. '.tar.gz'
 rockspec = prefix .. '.rockspec'
-
-subpackages = {is_enabled_flag(args.subpackages, args.no_subpackages, True)}
-autogen = {is_enabled_flag(args.autogen, args.no_autogen, False)}
-filelist = {is_enabled_flag(args.filelist, args.no_filelist, True)}
-skip_build_dependencies = {is_enabled_flag(args.skip_build_dependencies, args.no_skip_build_dependencies, False)}
-skip_check_dependencies = {is_enabled_flag(args.skip_check_dependencies, args.no_skip_check_dependencies, False)}
 template = 'generic.spec'
-
-"""
+""" ] + [ _(args) for _ in lua_code_extend_array ])
