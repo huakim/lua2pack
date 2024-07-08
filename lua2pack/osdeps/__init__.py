@@ -44,9 +44,6 @@ name = {name}
 
 """
 
-
-# Import the lua_type function from the lupa.lua module
-from lupa.lua import lua_type
 # Import the serialize function from the luadata module
 from luadata import serialize as lua_ser
 # Import the Mapping object
@@ -56,17 +53,13 @@ from collections.abc import Mapping
 def is_enabled_flag_str(arg, not_arg, default):
     return lua_ser(is_enabled_flag(arg, not_arg, default))
 
-# Define a function that declares a LuaMapping object for a given key
-def DeclareLuaMapping(key):
-    # Check if the key is a Lua table or a Mapping object
-    if lua_type(key) == 'table':
-        # If so, return a LuaMapping object for the key
-        return LuaMapping(key)
-    # Otherwise, return the key as is
-    return key
-
 # Define a LuaMapping class that inherits from the built-in dict class
-def LuaMapping(_LuaMappingClass__lua_table):
+def DeclareLuaMapping(_LuaMappingClass__lua_table):
+    # Import the lua_type function from the lupa.lua module
+    from lupa.lua import lua_type
+    if lua_type(_LuaMappingClass__lua_table) != 'table':
+        # If so, return a LuaMapping object for the key
+        return _LuaMappingClass__lua_table
     class LuaMappingClass(dict):
         # Initialize the LuaMapping object with the given argument
         def __init__(self):

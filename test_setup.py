@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Import necessary modules
 import lua2pack
 from lua2pack import osdeps

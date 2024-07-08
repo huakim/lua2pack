@@ -7,7 +7,7 @@ import argparse
 from .osdeps_utils import lua_code as os_specific_lua_code, generate_args as os_specific_generate_args, mount_adapter
 from os.path import isdir, isfile
 from os import chdir
-from .osdeps import LuaMapping
+from .osdeps import DeclareLuaMapping as LuaMapping
 from os import path, listdir
 from jinja2_easy.generator import Generator
 import platformdirs

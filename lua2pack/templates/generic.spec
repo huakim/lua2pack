@@ -16,7 +16,9 @@ BuildRequires: lua-rpm-macros
 Requires(postun): alternatives
 Requires(post): alternatives
 Provides: %{luadist %{luarocks_pkg_name} = %{luarocks_pkg_version}}
-
+{%- if noarch %}
+BuildArch: noarch
+{%- endif %}
 {%- if custom_macros %}
 {{ custom_macros }}
 {%- endif %}
@@ -153,6 +155,7 @@ echo {{ add_check_requires[dep] }}
 {%- endif %}
 
 %build
+%{?custom_build}
 {%- if subpackages %}
 %if %{defined luarocks_subpackages_build}
 %{luarocks_subpackages_build}
@@ -161,13 +164,14 @@ echo {{ add_check_requires[dep] }}
 %if %{defined luarocks_pkg_build}
 %luarocks_pkg_build %{lua_version}
 %else
-%luarocks_build
+%luarocks_build --local
 %endif
 {%- if subpackages %}
 %endif
 {%- endif %}
 
 %install
+%{?custom_install}
 {%- if subpackages %}
 %if %{defined luarocks_subpackages_install}
 %{luarocks_subpackages_install}
@@ -213,4 +217,3 @@ echo {{ add_check_requires[dep] }}
 {%- if expected_files %}
 {{ expected_files }}
 {%- endif %}
-
