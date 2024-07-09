@@ -75,7 +75,7 @@ def custom_dependency(args, name, cache):
     return True
 
 # Create requirement duplicates
-duplicates = (lambda array: ['add_'+i for i in array] + ['add_luarocks_'+i for i in array]) ((*map(lambda a: a+"_requires", ('build', 'check', 'preun', 'pre', 'postun', 'post', 'pretrans', 'posttrans')), 'requires', 'provides', 'recommends'))
+duplicates = (lambda array, array2: ['add_'+i for i in array + array2] + ['add_luarocks_'+i for i in array]) ((*map(lambda a: a+"_requires", ('build', 'check', 'preun', 'pre', 'postun', 'post', 'pretrans', 'posttrans')), 'requires', 'provides', 'recommends'), ('patch','source','macro','text'))
 
 # Define generator's template environment
 generator = generate_rockspec('lua2pack', __path__[0])

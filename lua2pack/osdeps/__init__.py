@@ -55,6 +55,8 @@ def is_enabled_flag_str(arg, not_arg, default):
 
 # Define a LuaMapping class that inherits from the built-in dict class
 def DeclareLuaMapping(_LuaMappingClass__lua_table):
+    # Import the serialize function from the luadata module
+    from luadata import serialize as lua_ser
     # Import the lua_type function from the lupa.lua module
     from lupa.lua import lua_type
     if lua_type(_LuaMappingClass__lua_table) != 'table':
