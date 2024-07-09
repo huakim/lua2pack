@@ -16,23 +16,21 @@ BuildRequires: lua-rpm-macros
 Requires(postun): alternatives
 Requires(post): alternatives
 Provides: %{luadist %{luarocks_pkg_name} = %{luarocks_pkg_version}}
-{%- for dep in add_patches %}
-{%- endif %}
 {%- if noarch %}
 BuildArch: noarch
 {%- endif %}
 {%- for dep in add_source %}
 Source{{ str(int(dep) + 1) }}: {{ add_source[dep] }}
-{%- endif %}
+{%- endfor %}
 {%- for dep in add_patch %}
 Patch{{ str(int(dep) - 1) }}: {{ add_patch[dep] }}
-{%- endif %}
+{%- endfor %}
 {%- for dep in add_macro %}
 %define {{ add_macro[dep] }}
-{%- endif %}
+{%- endfor %}
 {%- for dep in add_text %}
 {{ add_text[dep] }}
-{%- endif %}
+{%- endfor %}
 {%- if not autoreqs %}
 %global __luarocks_requires %{_bindir}/true
 %global __luarocks_provides %{_bindir}/true
