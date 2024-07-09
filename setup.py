@@ -19,6 +19,7 @@ setup(
 	'jinja2-easy.generator',
 	'lupa',
 	'luadata',
+        'luadata.luatable',
 	'toposort',
 	'platformdirs',
 	'jinja2',
