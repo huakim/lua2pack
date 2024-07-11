@@ -8,7 +8,7 @@ from .osdeps_utils import lua_code as os_specific_lua_code, generate_args as os_
 from os.path import isdir, isfile
 from os import chdir
 from .osdeps import DeclareLuaMapping as LuaMapping
-from os import path, listdir
+from os import path, listdir, getcwd
 from jinja2_easy.generator import Generator
 import platformdirs
 
@@ -18,12 +18,15 @@ from requests_glob import FileAdapter
 from requests_text import TextAdapter
 from requests_stdin import StdinAdapter
 
-def read_rockspec(path_or_url):
+def get_session(cur_dir):
     s = Session()
-    s.mount('file://', FileAdapter())
+    s.current_directory = cur_dir
+    s.mount('file://', FileAdapter(netloc_mounts={'.':cur_dir}))
     s.mount('text://', TextAdapter())
     s.mount('stdin://',StdinAdapter())
     mount_adapter(s)
+
+def read_rockspec(s, path_or_url):
     try:
         return s.get(path_or_url).text
     except RequestException:

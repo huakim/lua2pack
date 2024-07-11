@@ -25,7 +25,7 @@ def is_enabled_flag(arg, not_arg, default):
 
 
 def mount_adapter(adapter):
-    adapter.mount('glob://', GlobAdapter())
+    adapter.mount('glob://', GlobAdapter(netloc_mounts={'.':current_directory}))
 
 def lua_code(args):
     '''add lua code'''
