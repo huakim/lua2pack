@@ -33,8 +33,9 @@ def read_rockspec(s, path_or_url):
         return open(path_or_url, 'r').read()
 
 class generate_rockspec(Generator):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, cur_dir, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.session = get_session(cur_dir)
     # function used for generating rockspec specification
     def rockspec(generator, args):
         # get rockspec path
@@ -45,7 +46,7 @@ class generate_rockspec(Generator):
         newline="\n"
         # generate lua code (luarocks rockspec contains an lua compatible code)
         luaprog = f'''
-{newline.join(read_rockspec(rockspec_path_i) for rockspec_path_i in rockspec_path)}
+{newline.join(read_rockspec(self.session, rockspec_path_i) for rockspec_path_i in rockspec_path)}
 {os_specific_lua_code(args)}
 {newline.join([cache[a]  for a in duplicates if custom_dependency(args, a, cache)] + luacode + [a[0] + '=' + a[1] for a in defines if len(a) >  1])}
 '''
@@ -81,7 +82,7 @@ def custom_dependency(args, name, cache):
 duplicates = (lambda array, array2: ['add_'+i for i in array + array2] + ['add_luarocks_'+i for i in array]) ((*map(lambda a: a+"_requires", ('build', 'check', 'preun', 'pre', 'postun', 'post', 'pretrans', 'posttrans')), 'requires', 'provides', 'recommends'), ('patch','source','macro','text'))
 
 # Define generator's template environment
-generator = generate_rockspec('lua2pack', __path__[0])
+generator = generate_rockspec(type('cwd', (), {'__str__': lambda s: getcwd()}), 'lua2pack', __path__[0])
 
 def main(args=None):
     # Create the parser
