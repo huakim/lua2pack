@@ -18,24 +18,28 @@ from requests_glob import FileAdapter
 from requests_text import TextAdapter
 from requests_stdin import StdinAdapter
 
-def get_session(cur_dir):
-    s = Session()
-    s.current_directory = cur_dir
-    s.mount('file://', FileAdapter(netloc_mounts={'.':cur_dir}))
-    s.mount('text://', TextAdapter())
-    s.mount('stdin://',StdinAdapter())
-    mount_adapter(s)
-
-def read_rockspec(s, path_or_url):
-    try:
-        return s.get(path_or_url).text
-    except RequestException:
-        return open(path_or_url, 'r').read()
 
 class generate_rockspec(Generator):
     def __init__(self, cur_dir, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.session = get_session(cur_dir)
+        self.session = Session()
+        self.current_directory = cur_dir
+        self.get_session()
+
+    # setup requests session
+    def get_session(self):
+        self.session.mount('file://', FileAdapter(netloc_paths={'.':self.current_directory}))
+        self.session.mount('text://', TextAdapter())
+        self.session.mount('stdin://',StdinAdapter())
+        mount_adapter(self)
+
+    # read rockspec file
+    def read_rockspec_file(self, path_or_url):
+        try:
+            return self.session.get(path_or_url).text
+        except RequestException:
+            return open(path_or_url, 'r').read()
+
     # function used for generating rockspec specification
     def rockspec(generator, args):
         # get rockspec path
@@ -43,10 +47,11 @@ class generate_rockspec(Generator):
         luacode = args.luacode or []
         defines = args.define or []
         cache={}
+        session = generator.session
         newline="\n"
         # generate lua code (luarocks rockspec contains an lua compatible code)
         luaprog = f'''
-{newline.join(read_rockspec(self.session, rockspec_path_i) for rockspec_path_i in rockspec_path)}
+{newline.join(generator.read_rockspec_file(rockspec_path_i) for rockspec_path_i in rockspec_path)}
 {os_specific_lua_code(args)}
 {newline.join([cache[a]  for a in duplicates if custom_dependency(args, a, cache)] + luacode + [a[0] + '=' + a[1] for a in defines if len(a) >  1])}
 '''
@@ -56,6 +61,7 @@ class generate_rockspec(Generator):
         lua.execute(luaprog)
         # get lua globals
         return lua.globals()
+
     # function used for generating from template
     def __call__(generator, args):
         rockspec = generator.rockspec(args)
@@ -81,8 +87,12 @@ def custom_dependency(args, name, cache):
 # Create requirement duplicates
 duplicates = (lambda array, array2: ['add_'+i for i in array + array2] + ['add_luarocks_'+i for i in array]) ((*map(lambda a: a+"_requires", ('build', 'check', 'preun', 'pre', 'postun', 'post', 'pretrans', 'posttrans')), 'requires', 'provides', 'recommends'), ('patch','source','macro','text'))
 
+class GetCwd:
+    def __repr__(self):
+        return getcwd()
+
 # Define generator's template environment
-generator = generate_rockspec(type('cwd', (), {'__str__': lambda s: getcwd()}), 'lua2pack', __path__[0])
+generator = generate_rockspec(GetCwd(), 'lua2pack', __path__[0])
 
 def main(args=None):
     # Create the parser
