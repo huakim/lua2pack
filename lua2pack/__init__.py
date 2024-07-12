@@ -18,12 +18,15 @@ from requests_glob import FileAdapter
 from requests_text import TextAdapter
 from requests_stdin import StdinAdapter
 
+class GetCwd:
+    def __repr__(self):
+        return getcwd()
 
 class generate_rockspec(Generator):
-    def __init__(self, cur_dir, *args, **kwargs):
+    def __init__(self, *args, current_directory=GetCwd(), **kwargs):
         super().__init__(*args, **kwargs)
         self.session = Session()
-        self.current_directory = cur_dir
+        self.current_directory = current_directory
         self.get_session()
 
     # setup requests session
@@ -87,12 +90,8 @@ def custom_dependency(args, name, cache):
 # Create requirement duplicates
 duplicates = (lambda array, array2: ['add_'+i for i in array + array2] + ['add_luarocks_'+i for i in array]) ((*map(lambda a: a+"_requires", ('build', 'check', 'preun', 'pre', 'postun', 'post', 'pretrans', 'posttrans')), 'requires', 'provides', 'recommends'), ('patch','source','macro','text'))
 
-class GetCwd:
-    def __repr__(self):
-        return getcwd()
-
 # Define generator's template environment
-generator = generate_rockspec(GetCwd(), 'lua2pack', __path__[0])
+generator = generate_rockspec('lua2pack', __path__[0])
 
 def main(args=None):
     # Create the parser

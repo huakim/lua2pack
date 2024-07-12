@@ -85,7 +85,7 @@ build = {
 text_test_rockspec = f'text://{test_rockspec_content}'
 
 # Generate a rockspec using the test_case and lua2pack directory
-generator = generate_rockspec(GetCwd(), 'test_case', os.path.join(os.getcwd(), 'lua2pack'))
+generator = generate_rockspec('test_case', os.path.join(os.getcwd(), 'lua2pack'))
 
 def remove_if_exists(name):
     if os.path.exists(name):
