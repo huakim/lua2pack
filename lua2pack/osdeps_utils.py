@@ -81,10 +81,7 @@ osdeps_mount_adapter = get_osdeps_functions('mount_adapter')
 def update_globals(global_dict):
     '''update globals'''
     for func in osdeps_update_globals:
-        d=func()
-        print(global_dict)
         global_dict.update(func())
-        print(d)
 
 def mount_adapter(session):
     '''mount adapters if found'''
