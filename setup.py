@@ -18,7 +18,6 @@ setup(
       install_requires=[
 	'jinja2-easy.generator',
 	'lupa',
-	'luadata',
         'luadata.luatable',
 	'toposort',
 	'platformdirs',
