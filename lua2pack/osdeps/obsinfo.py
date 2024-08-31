@@ -2,6 +2,8 @@ import random
 import string
 import time
 from requests.adapters import BaseAdapter
+from requests import Response, codes
+import locale
 import re
 import io
 from io import BytesIO
@@ -48,7 +50,7 @@ class ObsInfoAdapter(BaseAdapter):
     def convert_to_rockspec(text):
         text_pieces = []
         for i in text.split('\n'):
-            if not i.isspace():
+            if i and not i.isspace():
                 match = ObsInfoAdapterRegex.match(i)
                 if not match:
                     return text
@@ -64,7 +66,7 @@ class ObsInfoAdapter(BaseAdapter):
         :param request: The PreparedRequest` being "sent".
         :returns: a Response object containing the file
         """
-
+        adapter = self.adapter
         # Check that the method makes sense. Only support GET
         if request.method not in ("GET", "HEAD"):
             raise ValueError("Invalid request method %s" % request.method)
