@@ -62,6 +62,12 @@ Provides: %{luadist {{ add_luarocks_provides[dep] }}}
 {%- for dep in add_luarocks_recommends %}
 Recommends: %{luadist {{ add_luarocks_recommends[dep] }}}
 {%- endfor %}
+{%- for dep in add_luarocks_conflicts %}
+Conflicts: %{luadist {{ add_luarocks_conflicts[dep] }}}
+{%- endfor %}
+{%- for dep in add_luarocks_obsoletes %}
+Obsoletes: %{luadist {{ add_luarocks_obsoletes[dep] }}}
+{%- endfor %}
 {%- for dep in add_requires %}
 Requires: {{ add_requires[dep] }}
 {%- endfor %}
@@ -88,6 +94,12 @@ Provides: {{ add_provides[dep] }}
 {%- endfor %}
 {%- for dep in add_recommends %}
 Recommends: {{ add_recommends[dep] }}
+{%- endfor %}
+{%- for dep in add_conflicts %}
+Conflicts: {{ add_conflicts[dep] }}
+{%- endfor %}
+{%- for dep in add_obsoletes %}
+Obsoletes: {{ add_obsoletes[dep] }}
 {%- endfor %}
 {%- if not autobuildreqs %}
 %if %{defined luarocks_buildrequires}
