@@ -13,6 +13,7 @@ License: {{ description.license or 'FIXME: License is missing' }}
 Source0: {{ archive }}
 Source1: {{ rockspec }}
 BuildRequires: lua-rpm-macros
+BuildRequires: luarock-macros
 Requires(postun): alternatives
 Requires(post): alternatives
 Provides: %{luadist %{luarocks_pkg_name} = %{luarocks_pkg_version}}
