@@ -13,6 +13,7 @@ License: MIT
 Source0: lua-cjson-2.1.0.11-1.tar.gz
 Source1: lua-cjson-2.1.0.11-1.rockspec
 BuildRequires: lua-rpm-macros
+BuildRequires: luarock-macros
 Requires(postun): alternatives
 Requires(post): alternatives
 Provides: %{luadist %{luarocks_pkg_name} = %{luarocks_pkg_version}}
