@@ -3,6 +3,7 @@
 %define luarocks_pkg_prefix {{ prefix }}
 %define luarocks_pkg_major {{ major }}
 %define luarocks_pkg_minor {{ minor }}
+%{?!luadist:%define luadist() lua}
 
 Name: {{ name }}
 Version: %{luarocks_pkg_major}
