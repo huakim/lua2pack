@@ -1,10 +1,8 @@
 %define luarocks_pkg_name {{ package }}
 %define luarocks_pkg_version {{ version }}
 %{?!luadist:%define luadist(-) lua}
-{%- if not sourcerock %}
 Source1: {{ rockspec }}
 %define luarocks_rockspec_file %{SOURCE1}
-{%- endif %}
 Name: {{ name }}
 Version: %{?luarocks_pkg_major}%{?!luarocks_pkg_major:0}
 Release: %{?luarocks_pkg_minor}%{?!luarocks_pkg_minor:0}%{?autorelease}

@@ -22,40 +22,63 @@ You can also check your distro of choice if they provide packages.
 Usage
 -----
 
-Lets suppose you want to package zope.interface_ and you don't know how it is named
-exactly. First of all, you can search for it and download the source tarball if
-you found the correct module:
+Lets suppose you want to package path. 
+First of all, you can download rockspec file
+and fetch source
 
 .. code-block:: bash
 
-    $ py2pack search zope.interface
-    searching for module zope.interface...
-    found zope.interface-3.6.1
-    $ py2pack fetch zope.interface
-    downloading package zope.interface-3.6.1...
-    from http://pypi.python.org/packages/source/z/zope.interface/zope.interface-3.6.1.tar.gz
+    $ luarocks download --rockspec path 
+    
+    $ lua2pack fetch --rockspec 'glob://./*.rockspec'
+    Cloning into 'lua-path'...
+    remote: Enumerating objects: 288, done.
+    remote: Total 288 (delta 0), reused 0 (delta 0), pack-reused 288 (from 1)
+    Receiving objects: 100% (288/288), 33.78 KiB | 6.76 MiB/s, done.
+    Resolving deltas: 100% (155/155), done.
+    Note: switching to '35f8e6b0e8f9a735ecc5b4834147fad83e42851d'.
+
+    You are in 'detached HEAD' state. You can look around, make experimental
+    changes and commit them, and you can discard any commits you make in this
+    state without impacting any branches by switching back to a branch.
+
+    If you want to create a new branch to retain commits you create, you may
+    do so (now or later) by using -c with the switch command. Example:
+
+      git switch -c <new-branch-name>
+
+    Or undo this operation with:
+
+      git switch -
+
+    Turn off this advice by setting config variable advice.detachedHead to false
+
+    Packed: /tmp/tmp9utki30_/path-1.1.0-1.src.rock
+    Successfully packed /tmp/tmp9utki30_/path-1.1.0-1.rockspec in /tmp/tmp9utki30_
+
+    Done. You may now enter directory 
+    path-1.1.0-1/lua-path
+    and type 'luarocks make' to build.
+    Successfully unpacked /tmp/tmp9utki30_/path-1.1.0-1.src.rock in /tmp/tmp9utki30_
+    Successfully created /extra/home/suse/Desktop/path-1.1.0-1.tar.gz
 
 
 As a next step you may want to generate a package recipe for your distribution.
-For RPM_-based distributions (let's use openSUSE_ as an example), you want to
-generate a spec file (named 'python-zope.interface.spec'):
+For RPM_-based distributions you want to
+generate a spec file (named 'lua-path.spec'):
 
 .. code-block:: bash
 
-    $ py2pack generate zope.interface -t opensuse.spec -f python-zope.interface.spec
+    $ lua2pack generate --rockspec 'glob://./*.rockspec' --template 'generic.spec'
 
 The source tarball and the package recipe is all you need to generate the RPM_
 (or DEB_) file.
-This final step may depend on which distribution you use. Again,
-for openSUSE_ (and by using the `Open Build Service`_), the complete recipe is:
+This final step may depend on which distribution you use. 
+For building source rpm file the complete recipe is:
 
 .. code-block:: bash
 
-    $ osc mkpac python-zope.interface
-    $ cd python-zope.interface
-    $ py2pack fetch zope.interface
-    $ py2pack generate zope.interface -f python-zope.interface.spec
-    $ osc build
+    $ rpmbuild -bs "-D_sourcedir $PWD" lua-path.spec
     ...
 
 Depending on the module, you may have to adapt the resulting spec file slightly.
@@ -63,30 +86,27 @@ To get further help about py2pack usage, issue the following command:
 
 .. code-block:: bash
 
-    $ py2pack help
+    $ lua2pack --help
 
 
 Hacking and contributing
 ------------------------
 
-You can test py2pack from your git checkout by executing the py2pack module.
+You can test lua2pack from your git checkout by executing the lua2pack module.
 
-Edit `py2pack/version.py` file changing the version number. Adding +1 to the revision
-number and optionally appending .dev1 is enough and makes sure that you can
-distinguish your hackish version from an installed one.
-
-From the py2pack directory, install the py2pack module locally.
+Edit `setup.py` file changing the version number.
+From the lua2pack directory, install the lua2pack module locally.
 
 .. code-block:: bash
 
     $ pip install -e .
 
-Now you can run your hackish py2pack version. It is usually located in
-$HOME/.local/bin/py2pack
+Now you can run your hackish lua2pack version. It is usually located in
+$HOME/.local/bin/lua2pack
 
 .. code-block:: bash
 
-    $ py2pack
+    $ lua2pack
 
 Fork `the repository`_ on Github to start making your changes to the **master**
 branch (or branch off of it). Don't forget to write a test for fixed issues or
@@ -101,7 +121,7 @@ To run a single test class via `tox`_, use i.e.:
 
 .. code-block:: bash
 
-    $ tox -epy38 test.test_py2pack:Py2packTestCase
+    $ tox -epy313 test.test_py2pack:Py2packTestCase
 
 
 You can also run `pytest`_ directly:
@@ -113,18 +133,15 @@ You can also run `pytest`_ directly:
 It assumes you have the test dependencies installed (available on PYTHONPATH)
 on your system.
 
-:copyright: (c) 2013 Sascha Peilicke.
+:copyright: (c) 2021 huakim tylyktar.
 :license: Apache-2.0, see LICENSE for more details.
 
 
 .. _argparse: http://pypi.python.org/pypi/argparse
 .. _Jinja2: http://pypi.python.org/pypi/Jinja2
-.. _zope.interface: http://pypi.python.org/pypi/zope.interface/
-.. _openSUSE: http://www.opensuse.org/en/
 .. _RPM: http://en.wikipedia.org/wiki/RPM_Package_Manager
 .. _DEB: http://en.wikipedia.org/wiki/Deb_(file_format)
 .. _`Python Package Index`: https://pypi.org/
-.. _`Open Build Service`: https://build.opensuse.org/package/show/devel:languages:python/python-py2pack
-.. _`the repository`: https://github.com/openSUSE/py2pack
+.. _`the repository`: https://github.com/huakim/lua2pack
 .. _`pytest`: https://github.com/pytest-dev/pytest
 .. _`tox`: http://testrun.org/tox
