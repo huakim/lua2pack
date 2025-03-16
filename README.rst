@@ -1,11 +1,11 @@
-Lua2pack: Generate distribution packages from `luarocks`_
+Lua2pack: Generate distribution packages from `Luarocks`_
 =================================================
 
 .. image:: https://github.com/huakim/lua2pack/actions/workflows/python-package.yml/badge.svg
         :target: https://github.com/huakim/lua2pack/actions/workflows/python-package.yml
         :alt: Unit tests
 
-This script allows to generate RPM spec files from `luarocks`_.
+This script allows to generate RPM spec files from `Luarocks`_.
 
 
 Installation
@@ -139,7 +139,7 @@ on your system.
 
 .. _argparse: http://pypi.python.org/pypi/argparse
 .. _Jinja2: http://pypi.python.org/pypi/Jinja2
-.. _luarocks: https://luarocks.org/search?q=path
+.. _Luarocks: https://luarocks.org
 .. _path: https://luarocks.org/modules/mah0x211/path
 .. _RPM: http://en.wikipedia.org/wiki/RPM_Package_Manager
 .. _DEB: http://en.wikipedia.org/wiki/Deb_(file_format)
