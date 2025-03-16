@@ -74,7 +74,7 @@ class generate_rockspec(Generator):
         if outdir and isdir(outdir):
             chdir(outdir)
         mp = LuaMapping(rockspec)
-        if (is_enabled(args, 'tostdout', True)):
+        if (is_enabled(args, 'tostdout')):
             generator.render(mp, template)
         else:
             generator.write_template(mp, template, filename)
