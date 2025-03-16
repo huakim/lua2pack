@@ -1,16 +1,15 @@
-%define luarocks_pkg_name {{ package }}
-%define luarocks_pkg_major {{ major }}
-%define luarocks_pkg_minor {{ minor }}
 %{?!luadist:%define luadist(-) lua}
-
+{%- if sourcerock %}
+Source1: {{ rockspec }}
+%define luarocks_rockspec_file %{SOURCE1}
+{%- endif %}
 Name: {{ name }}
-Version: %{luarocks_pkg_major}
-Release: %{luarocks_pkg_minor}
+Version: %{?luarocks_pkg_major}%{?!luarocks_pkg_major:0}
+Release: %{?luarocks_pkg_minor}%{?!luarocks_pkg_minor:0}
 Summary: {{ description.summary or 'FIXME: Summary is missing' }}
 Url: {{ description.homepage or 'https://fix.me/homepage/is/missing' }}
 License: {{ description.license or 'FIXME: License is missing' }}
 Source0: {{ archive }}
-Source1: {{ rockspec }}
 BuildRequires: lua-rpm-macros
 BuildRequires: luarocks-macros
 Requires(postun): alternatives
