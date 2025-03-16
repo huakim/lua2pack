@@ -1,6 +1,4 @@
 %define luarocks_pkg_name {{ package }}
-%define luarocks_pkg_version {{ version }}
-%define luarocks_pkg_prefix {{ prefix }}
 %define luarocks_pkg_major {{ major }}
 %define luarocks_pkg_minor {{ minor }}
 %{?!luadist:%define luadist(-) lua}
@@ -188,7 +186,7 @@ echo {{ add_check_requires[dep] }}
 %if %{defined luarocks_pkg_build}
 %luarocks_pkg_build %{lua_version}
 %else
-%luarocks_build %{SOURCE1}
+%luarocks_build_luaver %{lua_version}
 %endif
 {%- if subpackages %}
 %endif
@@ -204,7 +202,7 @@ echo {{ add_check_requires[dep] }}
 %if %{defined luarocks_pkg_install}
 %luarocks_pkg_install %{lua_version}
 %else
-%luarocks_install %{luarocks_pkg_prefix}.*.rock
+%luarocks_build_luaver %{lua_version}
 %endif
 {%- if subpackages %}
 %endif
