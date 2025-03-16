@@ -117,13 +117,6 @@ the repository root directory via `tox`_:
 
     $ tox
 
-To run a single test class via `tox`_, use i.e.:
-
-.. code-block:: bash
-
-    $ tox -epy313 test.test_py2pack:Py2packTestCase
-
-
 You can also run `pytest`_ directly:
 
 .. code-block:: bash
@@ -139,6 +132,8 @@ on your system.
 
 .. _argparse: http://pypi.python.org/pypi/argparse
 .. _Jinja2: http://pypi.python.org/pypi/Jinja2
+.. _`luarocks`: https://luarocks.org/
+.. _`path`: https://luarocks.org/modules/mah0x211/path 
 .. _RPM: http://en.wikipedia.org/wiki/RPM_Package_Manager
 .. _DEB: http://en.wikipedia.org/wiki/Deb_(file_format)
 .. _`Python Package Index`: https://pypi.org/
