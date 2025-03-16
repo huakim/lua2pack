@@ -1,6 +1,3 @@
-[submodule "lua2pack/bundled/jinja2_easy"]
-	path = lua2pack/bundled/jinja2_easy
-	url = https://github.com/huakim/python-jinja2_easy.generator
 [submodule "lua2pack/bundled/luadata"]
 	path = lua2pack/bundled/luadata
 	url = https://github.com/huakim/luadata.luatable
