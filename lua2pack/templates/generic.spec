@@ -203,7 +203,7 @@ echo {{ add_check_requires[dep] }}
 %if %{defined luarocks_pkg_install}
 %luarocks_pkg_install %{lua_version}
 %else
-%luarocks_build_luaver %{lua_version}
+%luarocks_install_luaver %{lua_version}
 %endif
 {%- if subpackages %}
 %endif
