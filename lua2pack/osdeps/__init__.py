@@ -13,7 +13,11 @@ def store_flag(parser, name):
 
 def is_enabled_array(array, default=False, revert=False):
     if not array is None:
-        default = array[0] == 'enable' if len(array) > 0 else True
+        if len(array) == 0:
+            default = True
+        else:
+            default = str(array[0]).lower()
+            default = ((default == 'enable') or (default == 'yes') or (default == 'y') or (default == 'true'))
         if revert:
             default = not default
     return not not default
@@ -22,6 +26,11 @@ def is_enabled_flag(arg, not_arg, default):
     return is_enabled_array(arg if default else not_arg,
         is_enabled_array(not_arg if default else arg,
             default, default), not default)
+
+def is_enabled(args, name, default=False):
+    name = name.replace('-','_')
+    noname = 'no_' + name
+    return is_enabled_flag(getattr(args, name), getattr(args, noname), default)
 
 def mount_adapter(adapter):
     adapter.session.mount('glob://', GlobAdapter(netloc_paths={'.':adapter.current_directory}))

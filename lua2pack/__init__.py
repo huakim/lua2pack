@@ -7,7 +7,7 @@ import argparse
 from .osdeps_utils import lua_code as os_specific_lua_code, generate_args as os_specific_generate_args, mount_adapter
 from os.path import isdir, isfile
 from os import chdir
-from .osdeps import DeclareLuaMapping as LuaMapping
+from .osdeps import DeclareLuaMapping as LuaMapping, is_enabled, store_flag
 from os import path, listdir, getcwd
 from jinja2_easy.generator import Generator
 import platformdirs
@@ -99,13 +99,13 @@ def main(args=None):
     # set defaults
     mainparser.set_defaults(func=lambda *a: mainparser.print_help())
     # add noop operation
-    mainparser.add_argument("--noop", help='', type=str, default='disable')
+    store_flag(mainparser, 'noop')
     # add subparsers
     subparsers = mainparser.add_subparsers(title='commands')
     # add generate command
     parser = subparsers.add_parser('generate', help="generate RPM spec or DEB dsc file for a rockspec specification")
     # add noop operation
-    parser.add_argument("--noop", help='', type=str, default='disable')
+    store_flag(parser, 'noop')
     # Define the command-line arguments
     # Rockspec file
     parser.add_argument("--rockspec", help="Path to the rockspec file or URI", type=str, action='append')
@@ -129,7 +129,7 @@ def main(args=None):
     # Parse arguments
     args = mainparser.parse_args(args)
     # Check if noop is enabled, if yes, then exit
-    if args.noop.lower() in ['enable', 'yes', 'true', 'y']:
+    if is_enabled(args, 'noop'):
        return
     # Execute function
     args.func(args)
