@@ -1,5 +1,5 @@
 %{?!luadist:%define luadist(-) lua}
-{%- if sourcerock %}
+{%- if not sourcerock %}
 Source1: {{ rockspec }}
 %define luarocks_rockspec_file %{SOURCE1}
 {%- endif %}
