@@ -1,17 +1,9 @@
 import platform
 
-try:
-    from requests_glob import GlobAdapter
-except ImportError:
-    from ..bundled.requests_glob.requests_glob import GlobAdapter
-
+from ..bundled.requests_glob.requests_glob import GlobAdapter
 # Import the serialize function from the luadata module
 from luadata import serialize as lua_ser
-
-try:
-    from luadata.luatable import LuaTable as DeclareLuaMapping
-except Exception:
-    from ..bundled.luadata.luadata.luatable import LuaTable as DeclareLuaMapping
+from ..bundled.luadata.luadata.luatable import LuaTable as DeclareLuaMapping
 
 
 def generate_args(parser):
@@ -53,9 +45,7 @@ def is_enabled(args, name, default=False):
 
 
 def mount_adapter(adapter):
-    adapter.session.mount(
-        "glob://", GlobAdapter(netloc_paths={".": adapter.current_directory})
-    )
+    adapter.session.mount("glob://", GlobAdapter(netloc_paths={".": adapter.current_directory}))
 
 
 def lua_code(args):

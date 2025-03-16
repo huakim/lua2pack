@@ -27,10 +27,7 @@ from os.path import join, isdir
 from os import chdir, listdir, getcwd
 from .osdeps import DeclareLuaMapping as LuaMapping, is_enabled, store_flag
 
-try:
-    from jinja2_easy.generator import Generator
-except ImportError:
-    from .bundled.jinja2_easy.jinja2_easy.generator import Generator
+from .bundled.jinja2_easy.jinja2_easy.generator import Generator
 
 import subprocess
 import tempfile
@@ -39,21 +36,9 @@ import tarfile
 
 from requests import Session
 from requests.exceptions import RequestException
-
-try:
-    from requests_glob import FileAdapter
-except ImportError:
-    from .bundled.requests_glob.requests_glob import FileAdapter
-
-try:
-    from requests_text import TextAdapter
-except ImportError:
-    from .bundled.requests_text.requests_text import TextAdapter
-
-try:
-    from requests_stdin import StdinAdapter
-except ImportError:
-    from .bundled.requests_stdin.requests_stdin import StdinAdapter
+from .bundled.requests_glob.requests_glob import FileAdapter
+from .bundled.requests_text.requests_text import TextAdapter
+from .bundled.requests_stdin.requests_stdin import StdinAdapter
 
 
 class GetCwd:
