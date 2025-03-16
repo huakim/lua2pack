@@ -1,18 +1,15 @@
 %define luarocks_pkg_name lua-cjson
 %define luarocks_pkg_version 2.1.0.11-1
-%define luarocks_pkg_prefix lua-cjson-2.1.0.11-1
-%define luarocks_pkg_major 2.1.0.11
-%define luarocks_pkg_minor 1
 %{?!luadist:%define luadist(-) lua}
-
+Source1: lua-cjson-2.1.0.11-1.rockspec
+%define luarocks_rockspec_file %{SOURCE1}
 Name: lua-cjson
-Version: %{luarocks_pkg_major}
-Release: %{luarocks_pkg_minor}
+Version: %{?luarocks_pkg_major}%{?!luarocks_pkg_major:0}
+Release: %{?luarocks_pkg_minor}%{?!luarocks_pkg_minor:0}%{?autorelease}
 Summary: A fast JSON encoding/parsing module
 Url: http://www.kyne.com.au/~mark/software/lua-cjson.php
 License: MIT
 Source0: lua-cjson-2.1.0.11-1.tar.gz
-Source1: lua-cjson-2.1.0.11-1.rockspec
 BuildRequires: lua-rpm-macros
 BuildRequires: luarocks-macros
 Requires(postun): alternatives
@@ -43,7 +40,7 @@ Provides: luadist(%{luarocks_pkg_name}) = %{luarocks_pkg_version}
 %if %{defined luarocks_pkg_build}
 %luarocks_pkg_build %{lua_version}
 %else
-%luarocks_build --local %{SOURCE1}
+%luarocks_build_luaver %{lua_version}
 %endif
 
 %install
@@ -51,7 +48,7 @@ Provides: luadist(%{luarocks_pkg_name}) = %{luarocks_pkg_version}
 %if %{defined luarocks_pkg_install}
 %luarocks_pkg_install %{lua_version}
 %else
-%luarocks_install %{luarocks_pkg_prefix}.*.rock
+%luarocks_install_luaver %{lua_version}
 %endif
 
 %check
