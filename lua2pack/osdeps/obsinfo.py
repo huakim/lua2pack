@@ -5,8 +5,8 @@ from requests.adapters import BaseAdapter
 from requests import Response, codes
 import locale
 import re
-import io
 from io import BytesIO
+
 
 def generate_random_hex(length=40):
     """
@@ -25,20 +25,23 @@ def generate_random_hex(length=40):
     random_chars = [random.choice(hex_chars) for _ in range(length)]
 
     # Join the random characters into a string
-    random_hex = ''.join(random_chars)
+    random_hex = "".join(random_chars)
 
     return random_hex.lower()
 
+
 def lua_code(args):
-    st = """
+    st = ("""
 filename = package .. '.obsinfo'
-""" if args.template == 'obs.obsinfo' else ''
+""" if args.template == "obs.obsinfo" else "" )
     return st + """
 mtime = __get_current_timestamp()
 commit = __random_hex_numbers()
 """
 
-ObsInfoAdapterRegex=re.compile('(^[A-Za-z][A-Za-z0-9]*)\s*:\s*(.*)')
+
+ObsInfoAdapterRegex = re.compile("(^[A-Za-z][A-Za-z0-9]*)\s*:\s*(.*)")
+
 
 class ObsInfoAdapter(BaseAdapter):
     def __init__(self, adapter, set_content_length=True):
@@ -49,15 +52,15 @@ class ObsInfoAdapter(BaseAdapter):
     @staticmethod
     def convert_to_rockspec(text):
         text_pieces = []
-        for i in text.split('\n'):
+        for i in text.split("\n"):
             if i and not i.isspace():
                 match = ObsInfoAdapterRegex.match(i)
                 if not match:
                     return text
                 text_pieces.append(match)
-        text = ''
+        text = ""
         for i in text_pieces:
-            text = text + i.group(1) + '=' + repr(i.group(2).strip()) + '\n'
+            text = text + i.group(1) + "=" + repr(i.group(2).strip()) + "\n"
         return text
 
     def send(self, request, **kwargs):
@@ -71,7 +74,7 @@ class ObsInfoAdapter(BaseAdapter):
         if request.method not in ("GET", "HEAD"):
             raise ValueError("Invalid request method %s" % request.method)
         url = request.url
-        e = url[(url.find('://') + 3):]
+        e = url[(url.find("://") + 3) :]
         e = adapter.read_rockspec_file(e)
         e = ObsInfoAdapter.convert_to_rockspec(e)
         resp = Response()
@@ -94,13 +97,15 @@ class ObsInfoAdapter(BaseAdapter):
 
 
 def mount_adapter(adapter):
-    adapter.session.mount('obsinfo://', ObsInfoAdapter(adapter))
+    adapter.session.mount("obsinfo://", ObsInfoAdapter(adapter))
+
 
 def generate_timestamp():
     return int(time.time())
 
+
 def update_globals():
     return {
-       '__random_hex_numbers':generate_random_hex,
-       '__get_current_timestamp':generate_timestamp
+        "__random_hex_numbers": generate_random_hex,
+        "__get_current_timestamp": generate_timestamp,
     }

@@ -10,6 +10,8 @@ import os
 from lua2pack.osdeps import obsinfo
 from luadata import serialize as sr
 import sys
+
+
 # Define the test spec content, that must be generated
 if os.environ.get('GENERATE_TEST') != 'yes':
     try:
@@ -87,9 +89,11 @@ text_test_rockspec = f'text://{test_rockspec_content}'
 # Generate a rockspec using the test_case and lua2pack directory
 generator = generate_rockspec('test_case', os.path.join(os.getcwd(), 'lua2pack'))
 
+
 def remove_if_exists(name):
     if os.path.exists(name):
         os.remove(name)
+
 
 def test_lua2pack_imports():
     # Test that the necessary modules can be imported
@@ -98,17 +102,21 @@ def test_lua2pack_imports():
     remove_if_exists('lua-cjson.obsinfo')
     pass
 
+
 class MappingTest(dict):
     # A custom dictionary class that allows attribute access
     def __init__(self, *a, **b):
         super().__init__(*a, **b)
+
     def __getattr__(self, name):
         try:
             return self[name]
         except KeyError:
             return None
+
     def __setattr__(self, name, value):
         self[name] = value
+
 
 def test_templates():
     # Test that the expected template files are generated
@@ -117,12 +125,14 @@ def test_templates():
     assert 'rock.rockspec' in files
     assert 'obs.obsinfo' in files
 
+
 mtime = obsinfo.generate_timestamp()
 commit = obsinfo.generate_random_hex()
 obsinfo_text=f"""name: lua-cjson
 version: 2.1.0.11-1
 mtime: {str(mtime)}
 commit: {commit}"""
+
 
 def test_obsinfo_generated():
     # Test that the .obsinfo file is generated correctly
@@ -139,6 +149,7 @@ def test_obsinfo_generated():
 
     with open('lua-cjson.obsinfo','r') as read:
         assert read.read() == obsinfo_text
+
 
 def test_rockspec_generated():
     # Test that the .rockspec file is generated correctly
@@ -176,9 +187,11 @@ def test_rockspec_generated():
         assert spec_text1 == spec_text2 == spec_text3 == test_spec_content
     test_lua2pack_imports()
 
+
 def test_noop():
     lua2pack.main(['generate', '--noop','enable'])
     lua2pack.main(['--noop','enable'])
+
 
 if 'pytest' not in sys.modules:
     test_spec_content = None
