@@ -115,7 +115,7 @@ def main(args=None):
     parser.add_argument("--luacode", help="Override some lua codes", type=str, action='append')
     # Add duplicates
     for i in duplicates:
-        parser.add_argument('--'+i.replace('_', '-'), help=f"Additional {i.replace('_', ' ')} dependencies to be added", type=str, action='append')
+        parser.add_argument('--'+i.replace('_', '-'), help=f"Additional {i.replace('_', ' ')[1:]} to be added", type=str, action='append')
     os_specific_generate_args(parser)
 
     # Template file for generate command
