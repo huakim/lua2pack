@@ -73,7 +73,11 @@ class generate_rockspec(Generator):
         outdir = args.outdir or rockspec.outdir
         if outdir and isdir(outdir):
             chdir(outdir)
-        generator.write_template(LuaMapping(rockspec), template, filename)
+        mp = LuaMapping(rockspec)
+        if (is_enabled(args, 'tostdout', True)):
+            generator.render(mp, template)
+        else:
+            generator.write_template(mp, template, filename)
 
 
 def custom_dependency(args, name, cache):
@@ -106,6 +110,8 @@ def main(args=None):
     parser = subparsers.add_parser('generate', help="generate RPM spec or DEB dsc file for a rockspec specification")
     # add noop operation
     store_flag(parser, 'noop')
+    # add tostdout flag
+    store_flag(parser, 'tostdout')
     # Define the command-line arguments
     # Rockspec file
     parser.add_argument("--rockspec", help="Path to the rockspec file or URI", type=str, action='append')
