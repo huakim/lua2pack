@@ -188,7 +188,7 @@ echo {{ add_check_requires[dep] }}
 %if %{defined luarocks_pkg_build}
 %luarocks_pkg_build %{lua_version}
 %else
-%luarocks_build --local %{SOURCE1}
+%luarocks_build %{SOURCE1}
 %endif
 {%- if subpackages %}
 %endif

@@ -3,6 +3,7 @@
 %define luarocks_pkg_prefix lua-cjson-2.1.0.11-1
 %define luarocks_pkg_major 2.1.0.11
 %define luarocks_pkg_minor 1
+%{?!luadist:%define luadist(-) lua}
 
 Name: lua-cjson
 Version: %{luarocks_pkg_major}
@@ -13,7 +14,7 @@ License: MIT
 Source0: lua-cjson-2.1.0.11-1.tar.gz
 Source1: lua-cjson-2.1.0.11-1.rockspec
 BuildRequires: lua-rpm-macros
-BuildRequires: luarock-macros
+BuildRequires: luarocks-macros
 Requires(postun): alternatives
 Requires(post): alternatives
 Provides: %{luadist %{luarocks_pkg_name} = %{luarocks_pkg_version}}
@@ -42,7 +43,7 @@ Provides: luadist(%{luarocks_pkg_name}) = %{luarocks_pkg_version}
 %if %{defined luarocks_pkg_build}
 %luarocks_pkg_build %{lua_version}
 %else
-%luarocks_build --local
+%luarocks_build --local %{SOURCE1}
 %endif
 
 %install
