@@ -1,3 +1,5 @@
+%define luarocks_pkg_name {{ package }}
+%define luarocks_pkg_version {{ version }}
 %{?!luadist:%define luadist(-) lua}
 {%- if not sourcerock %}
 Source1: {{ rockspec }}
@@ -5,7 +7,7 @@ Source1: {{ rockspec }}
 {%- endif %}
 Name: {{ name }}
 Version: %{?luarocks_pkg_major}%{?!luarocks_pkg_major:0}
-Release: %{?luarocks_pkg_minor}%{?!luarocks_pkg_minor:0}
+Release: %{?luarocks_pkg_minor}%{?!luarocks_pkg_minor:0}%{?autorelease}
 Summary: {{ description.summary or 'FIXME: Summary is missing' }}
 Url: {{ description.homepage or 'https://fix.me/homepage/is/missing' }}
 License: {{ description.license or 'FIXME: License is missing' }}
