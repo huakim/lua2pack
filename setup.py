@@ -23,7 +23,7 @@ setup(
 	'platformdirs',
 	'jinja2',
 	'requests',
-	'requests-glob',
+	'requests-glob > 0.3.0',
 	'requests-text',
 	'requests-stdin'
 ],

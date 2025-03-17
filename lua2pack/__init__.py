@@ -1,21 +1,5 @@
 #!/usr/bin/python3
 import sys
-
-for i in [
-    "jinja2_easy.generator",
-    "luadata.luatable",
-    "requests_file",
-    "requests_glob",
-    "requests_stdin",
-    "requests_text",
-]:
-    submodule = __name__ + ".bundled." + i.split(".")[0] + "." + i
-    try:
-        sys.modules[i] = __import__(submodule)
-    except ImportError:
-        pass
-
-
 from .lua_runtime import LuaRuntime
 import argparse
 from .osdeps_utils import (
@@ -27,7 +11,7 @@ from os.path import join, isdir
 from os import chdir, listdir, getcwd
 from .osdeps import DeclareLuaMapping as LuaMapping, is_enabled, store_flag
 
-from .bundled.jinja2_easy.jinja2_easy.generator import Generator
+from jinja2_easy.generator import Generator
 
 import subprocess
 import tempfile
@@ -36,9 +20,9 @@ import tarfile
 
 from requests import Session
 from requests.exceptions import RequestException
-from .bundled.requests_glob.requests_glob import FileAdapter
-from .bundled.requests_text.requests_text import TextAdapter
-from .bundled.requests_stdin.requests_stdin import StdinAdapter
+from requests_glob import FileAdapter
+from requests_text import TextAdapter
+from requests_stdin import StdinAdapter
 
 
 class GetCwd:

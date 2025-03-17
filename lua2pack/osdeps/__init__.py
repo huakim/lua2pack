@@ -1,9 +1,9 @@
 import platform
 
-from ..bundled.requests_glob.requests_glob import GlobAdapter
+from requests_glob import GlobAdapter
 # Import the serialize function from the luadata module
 from luadata import serialize as lua_ser
-from ..bundled.luadata.luadata.luatable import LuaTable as DeclareLuaMapping
+from luadata.luatable import LuaTable as DeclareLuaMapping
 
 
 def generate_args(parser):
