@@ -16,15 +16,15 @@ setup(
          ],
       },
       install_requires=[
-#	'jinja2-easy.generator',
+	'jinja2-easy.generator',
 	'lupa',
-'luadata',#	'luadata.luatable',
+	'luadata.luatable',
 	'toposort',
 	'platformdirs',
 	'jinja2',
 	'requests',
-'sortedcontainers', 'glob2'#	'requests-glob',
-#	'requests-text',
-#	'requests-stdin'
+	'requests-glob',
+	'requests-text',
+	'requests-stdin'
 ],
 )

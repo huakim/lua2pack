@@ -1,15 +1,3 @@
-[submodule "lua2pack/bundled/requests_glob"]
-	path = lua2pack/bundled/requests_glob
-	url = https://github.com/huakim/python-requests-glob
-[submodule "lua2pack/bundled/requests_stdin"]
-	path = lua2pack/bundled/requests_stdin
-	url = https://github.com/huakim/python-requests-stdin
-[submodule "lua2pack/bundled/requests_text"]
-	path = lua2pack/bundled/requests_text
-	url = https://github.com/huakim/python-requests-text
 [submodule "lua2pack/bundled/jinja2_easy"]
 	path = lua2pack/bundled/jinja2_easy
 	url = https://github.com/huakim/python-jinja2_easy
-[submodule "lua2pack/bundled/luadata"]
-	path = lua2pack/bundled/luadata
-	url = https://github.com/huakim/python-luadata.luatable.git
