@@ -1,6 +1,3 @@
-[submodule "lua2pack/bundled/requests_file"]
-	path = lua2pack/bundled/requests_file
-	url = https://github.com/huakim/python-requests-file
 [submodule "lua2pack/bundled/requests_glob"]
 	path = lua2pack/bundled/requests_glob
 	url = https://github.com/huakim/python-requests-glob
