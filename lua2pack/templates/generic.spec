@@ -4,8 +4,8 @@
 Source1: {{ rockspec }}
 %define luarocks_rockspec_file %{SOURCE1}
 Name: {{ name }}
-Version: %{?luarocks_pkg_major}%{?!luarocks_pkg_major:0}
-Release: %{?luarocks_pkg_minor}%{?!luarocks_pkg_minor:0}%{?autorelease}
+Version: {{ major }}
+Release: {{ minor }}%{?autorelease}
 Summary: {{ description.summary or 'FIXME: Summary is missing' }}
 Url: {{ description.homepage or 'https://fix.me/homepage/is/missing' }}
 License: {{ description.license or 'FIXME: License is missing' }}
