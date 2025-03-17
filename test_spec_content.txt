@@ -4,8 +4,8 @@
 Source1: lua-cjson-2.1.0.11-1.rockspec
 %define luarocks_rockspec_file %{SOURCE1}
 Name: lua-cjson
-Version: %{?luarocks_pkg_major}%{?!luarocks_pkg_major:0}
-Release: %{?luarocks_pkg_minor}%{?!luarocks_pkg_minor:0}%{?autorelease}
+Version: 2.1.0.11
+Release: 1%{?autorelease}
 Summary: A fast JSON encoding/parsing module
 Url: http://www.kyne.com.au/~mark/software/lua-cjson.php
 License: MIT
