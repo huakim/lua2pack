@@ -40,7 +40,7 @@ commit = __random_hex_numbers()
 """
 
 
-ObsInfoAdapterRegex = re.compile("(^[A-Za-z][A-Za-z0-9]*)\s*:\s*(.*)")
+ObsInfoAdapterRegex = re.compile(r"(^[A-Za-z][A-Za-z0-9]*)\s*:\s*(.*)")
 
 
 class ObsInfoAdapter(BaseAdapter):

@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-import sys
 from .lua_runtime import LuaRuntime
 import argparse
 from .osdeps_utils import (
@@ -15,7 +14,6 @@ from jinja2_easy.generator import Generator
 
 import subprocess
 import tempfile
-import sys
 import tarfile
 
 from requests import Session
