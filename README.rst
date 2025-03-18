@@ -82,7 +82,7 @@ For building source rpm file the complete recipe is:
     ...
 
 Depending on the module, you may have to adapt the resulting spec file slightly.
-To get further help about py2pack usage, issue the following command:
+To get further help about lua2pack usage, issue the following command:
 
 .. code-block:: bash
 
@@ -116,12 +116,6 @@ the repository root directory via `tox`_:
 .. code-block:: bash
 
     $ tox
-
-To run a single test class via `tox`_, use i.e.:
-
-.. code-block:: bash
-
-    $ tox -epy313 test.test_py2pack:Py2packTestCase
 
 
 You can also run `pytest`_ directly:
