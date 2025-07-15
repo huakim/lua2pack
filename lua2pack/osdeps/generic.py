@@ -14,7 +14,7 @@ def lua_code_extend_flag_func(name, default):
 
 def generate_args(parser):
     for i, d in (
-        ("subpackages", True),
+        ("subpackages", False),
         ("filelist", True),
         ("autobuildreqs", True),
         ("autoreqs", False),
