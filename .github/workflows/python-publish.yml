@@ -13,8 +13,7 @@ on:
   release:
     types: [published]
 
-permissions:
-  contents: read
+permissions: write-all
 
 jobs:
   deploy:
