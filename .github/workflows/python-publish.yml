@@ -18,9 +18,7 @@ permissions:
 
 jobs:
   deploy:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
@@ -35,13 +33,12 @@ jobs:
       run: python -m build
     - name: Get version
       run: |
-        TAG_NAME="$(pkginfo -f version --single dist/*.tar.gz)"
-        git tag $TAG_NAME
-        git push origin $TAG_NAME  
+        ver="$(pkginfo -f version --single dist/*.tar.gz)"
+        gh release create "${ver}" dist/*.tar.gz --title "New release: ${ver}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}`
     - name: Publish package
-      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+      uses: pypa/gh-action-pypi-publish@master
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
