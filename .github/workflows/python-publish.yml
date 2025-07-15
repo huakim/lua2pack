@@ -30,9 +30,14 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install build
+        pip install build pkginfo
     - name: Build package
       run: python -m build
+    - name: Get version
+      run: |
+        TAG_NAME="$(pkginfo -f version --single dist/*.tar.gz)"
+        git tag $TAG_NAME
+        git push origin $TAG_NAME
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
