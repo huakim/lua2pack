@@ -37,7 +37,9 @@ jobs:
       run: |
         TAG_NAME="$(pkginfo -f version --single dist/*.tar.gz)"
         git tag $TAG_NAME
-        git push origin $TAG_NAME
+        git push origin $TAG_NAME  
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}`
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
