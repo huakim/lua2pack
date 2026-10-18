@@ -3,6 +3,12 @@
 %{?!luadist:%define luadist(-) lua}
 Source1: {{ rockspec }}
 %define luarocks_rockspec_file %{SOURCE1}
+{%- if not major or major is none %}
+{%- set major = version %}
+{%- endif %}
+{%- if not minor or minor is none %}
+{%- set minor = '0' %}
+{%- endif %}
 Name: {{ name }}
 Version: {{ major }}
 Release: {{ minor }}%{?autorelease}
